@@ -1,3 +1,4 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
@@ -33,6 +34,24 @@ module.exports = env => {
                     exclude: /node_modules/,
                     loader: ['react-hot-loader/webpack', 'awesome-typescript-loader'],
                 },
+                {
+                    test: /\.css$/,
+                    use: ExtractTextPlugin.extract({
+                        use: 'css-loader',
+                    })
+                },
+                {
+                    test: /\.(png|svg|jpg|gif)$/,
+                    use: [
+                        'file-loader'
+                    ]
+                },
+                {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/,
+                    use: [
+                        'file-loader'
+                    ]
+                },
             ],
         },
         plugins: removeEmpty([
@@ -44,6 +63,7 @@ module.exports = env => {
                 }
             }),
             new webpack.HotModuleReplacementPlugin(),
+            new ExtractTextPlugin('styles.css'),
             ifProd(new webpack.optimize.UglifyJsPlugin({
                 compress: {
                     'screw_ie8': true,
