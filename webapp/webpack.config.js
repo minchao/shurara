@@ -1,3 +1,4 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
 
@@ -6,30 +7,27 @@ module.exports = env => {
     const ifDev = plugin => env == 'development' ? plugin : undefined
     const removeEmpty = array => array.filter(p => !!p)
 
-    console.log('env', env)
-
     return {
         devtool: ifDev('source-map'),
         entry: {
-            app: removeEmpty([
+            main: removeEmpty([
                 ifDev('react-hot-loader/patch'),
                 ifDev(`webpack-dev-server/client?http://localhost:3000`),
                 ifDev('webpack/hot/only-dev-server'),
                 path.join(__dirname, './src/index.tsx'),
             ]),
-            vendor: ['react', 'react-dom', 'mobx', 'mobx-react', 'tslib'],
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.json'],
         },
         output: {
-            filename: '[name].js',
-            sourceMapFilename: '[name].map.js',
-            path: path.join(__dirname, './build/'),
+            filename: '[name].[hash].js',
+            sourceMapFilename: '[name].[hash].map.js',
+            path: path.resolve(__dirname, 'dist'),
             // publicPath: '/', can uncomment if you want everything relative to root '/'
         },
         module: {
-            loaders: [
+            rules: [
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/,
@@ -38,6 +36,13 @@ module.exports = env => {
             ],
         },
         plugins: removeEmpty([
+            new webpack.optimize.CommonsChunkPlugin({
+                name: 'vendor',
+                minChunks: function (module) {
+                    // this assumes your vendor imports exist in the node_modules directory
+                    return module.context && module.context.indexOf('node_modules') !== -1;
+                }
+            }),
             new webpack.HotModuleReplacementPlugin(),
             ifProd(new webpack.optimize.UglifyJsPlugin({
                 compress: {
@@ -51,6 +56,11 @@ module.exports = env => {
                 },
                 sourceMap: false,
             })),
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, './src/index.html'),
+                filename: 'index.html',
+                inject: 'body',
+            }),
         ]),
     }
 }
