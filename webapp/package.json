@@ -25,6 +25,6 @@
   "scripts": {
     "start": "NODE_ENV=development node webpack-dev-server",
     "build": "NODE_ENV=production webpack",
-    "lint": "tslint -c tslint.json src/**/*.ts{,x}"
+    "tslint": "tslint -c tslint.json 'src/*.ts{,x}' 'src/**/*.ts{,x}'"
   }
 }
