@@ -15,7 +15,7 @@ module.exports = env => {
                 ifDev('react-hot-loader/patch'),
                 ifDev(`webpack-dev-server/client?http://localhost:3000`),
                 ifDev('webpack/hot/only-dev-server'),
-                path.join(__dirname, './src/index.ts'),
+                path.join(__dirname, './src/index.tsx'),
             ]),
             vendor: ['react', 'react-dom', 'mobx', 'mobx-react', 'tslib'],
         },

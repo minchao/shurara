@@ -14,6 +14,7 @@ const devServerConfig = {
     https: false,
     lazy: false,
     contentBase: path.join(__dirname, './src/'),
+    historyApiFallback: true,
     stats: { colors: true }
 }
 
