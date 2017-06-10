@@ -15,3 +15,8 @@ interface WebpackModule {
         removeStatusHandler(callback?: (status?: string) => void): void;
     };
 }
+
+declare module "*.json" {
+    const value: any;
+    export default value;
+}

@@ -17,8 +17,4 @@ export default class TopicStore {
     @observable public topic: ITopic
     @observable public posts: PostModel[] = []
     @observable public paging?: IPaging
-
-    @action public setPaging(paging: IPaging) {
-        this.paging = paging
-    }
 }
