@@ -63,7 +63,9 @@ module.exports = env => {
                 }
             }),
             new webpack.HotModuleReplacementPlugin(),
-            new ExtractTextPlugin('styles.css'),
+            new ExtractTextPlugin({
+                filename: "[name].[hash].css"
+            }),
             ifProd(new webpack.optimize.UglifyJsPlugin({
                 compress: {
                     'screw_ie8': true,
