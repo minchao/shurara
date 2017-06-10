@@ -31,9 +31,7 @@ export default class App extends React.Component<any, any> {
                     </Router>
                 </Provider>
 
-                <p>Hello, World</p>
-
-                <DevTools />
+                {module.hot && <DevTools />}
             </div>
         )
     }
