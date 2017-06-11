@@ -6,8 +6,8 @@ import * as React from "react"
 import {Route, Router} from "react-router"
 
 import TopicStore from "../stores/TopicStore"
-import Help from "./Help"
-import Home from "./Home"
+import HelpPage from "./HelpPage"
+import HomePage from "./HomePage"
 import Nav from "./Nav"
 
 import * as data from "../models/example_topic.json"
@@ -29,8 +29,8 @@ export default class App extends React.Component<any, any> {
                         <div>
                             <Nav/>
 
-                            <Route exact path="/" component={Home}/>
-                            <Route path="/help" component={Help}/>
+                            <Route exact path="/" component={HomePage}/>
+                            <Route path="/help" component={HelpPage}/>
                         </div>
                     </Router>
                 </Provider>

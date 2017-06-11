@@ -12,7 +12,7 @@ interface IProps {
 
 @inject("topic")
 @observer
-export default class Home extends React.Component<IProps, any> {
+export default class HomePage extends React.Component<IProps, any> {
     public render() {
         const topic = this.props.topic.topic
 
