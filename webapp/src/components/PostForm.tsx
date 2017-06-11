@@ -11,12 +11,18 @@ export default class PostForm extends React.Component<any, any> {
     public render() {
         return (
             <Modal
-                trigger={<Button primary onClick={this.handleOpen}>Post</Button>}
+                trigger={
+                    <Button
+                        icon="add"
+                        content="Post"
+                        onClick={this.handleOpen}
+                        primary
+                    />
+                }
                 closeOnDimmerClick={false}
                 open={this.open}
                 onClose={this.handleClose}
             >
-                <Modal.Header>Post</Modal.Header>
                 <Modal.Content>
                     <Form>
                         <Form.Field>
@@ -34,7 +40,7 @@ export default class PostForm extends React.Component<any, any> {
                     <Button
                         onClick={this.handleClose}
                         icon="cancel"
-                        content="cancel"
+                        content="Cancel"
                     />
                     <Button
                         type="submit"

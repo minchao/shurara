@@ -43,8 +43,20 @@ export default class Topic extends React.Component<IProps, any> {
                 </Container>
 
                 <Container textAlign="center">
-                    <Button onClick={this.pagingPrevious}>Prev</Button>
-                    <Button onClick={this.pagingNext}>Next</Button>
+                    <Button.Group className="paging">
+                        <Button
+                            icon="left chevron"
+                            labelPosition="left"
+                            content="Prev"
+                            onClick={this.pagingPrevious}
+                        />
+                        <Button
+                            icon="right chevron"
+                            labelPosition="right"
+                            content="Next"
+                            onClick={this.pagingNext}
+                        />
+                    </Button.Group>
                 </Container>
             </main>
         )
