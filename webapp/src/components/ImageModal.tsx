@@ -12,16 +12,7 @@ export default class ImageModal extends React.Component<IProps, any> {
 
     private image: string
 
-    @observable private open: boolean
-
-    @action public handleOpen = (image: string) => {
-        this.image = image
-        this.open = true
-    }
-
-    @action public handleClose = () => {
-        this.open = false
-    }
+    @observable private open: boolean = false
 
     public render() {
         this.props.openCallback(this.handleOpen)
@@ -35,5 +26,14 @@ export default class ImageModal extends React.Component<IProps, any> {
                 <Image wrapped src={this.image}/>
             </Modal>
         )
+    }
+
+    @action private handleOpen = (image: string) => {
+        this.image = image
+        this.open = true
+    }
+
+    @action private handleClose = () => {
+        this.open = false
     }
 }

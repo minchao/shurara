@@ -1,10 +1,21 @@
+import {action, observable} from "mobx"
+import {observer} from "mobx-react"
 import * as React from "react"
 import {Button, Form, Modal} from "semantic-ui-react"
 
+@observer
 export default class PostForm extends React.Component<any, any> {
+
+    @observable private open: boolean = false
+
     public render() {
         return (
-            <Modal trigger={<Button primary>Post</Button>}>
+            <Modal
+                trigger={<Button primary onClick={this.handleOpen}>Post</Button>}
+                closeOnDimmerClick={false}
+                open={this.open}
+                onClose={this.handleClose}
+            >
                 <Modal.Header>Post</Modal.Header>
                 <Modal.Content>
                     <Form>
@@ -21,6 +32,7 @@ export default class PostForm extends React.Component<any, any> {
                 </Modal.Content>
                 <Modal.Actions>
                     <Button
+                        onClick={this.handleClose}
                         icon="cancel"
                         content="cancel"
                     />
@@ -33,5 +45,13 @@ export default class PostForm extends React.Component<any, any> {
                 </Modal.Actions>
             </Modal>
         )
+    }
+
+    @action private handleOpen = () => {
+        this.open = true
+    }
+
+    @action private handleClose = () => {
+        this.open = false
     }
 }

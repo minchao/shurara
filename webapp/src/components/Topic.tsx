@@ -18,7 +18,7 @@ export default class Topic extends React.Component<IProps, any> {
 
     public render() {
         return (
-            <div>
+            <main>
                 <Container textAlign="right">
                     <PostForm/>
                     <Divider/>
@@ -46,7 +46,7 @@ export default class Topic extends React.Component<IProps, any> {
                     <Button onClick={this.pagingPrevious}>Prev</Button>
                     <Button onClick={this.pagingNext}>Next</Button>
                 </Container>
-            </div>
+            </main>
         )
     }
 

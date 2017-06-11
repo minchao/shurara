@@ -33,12 +33,9 @@ export default class HomePage extends React.Component<IProps, any> {
                         }
                         <Divider/>
                     </Container>
-
                 </header>
 
-                <main>
-                    <Topic topic={this.props.topic}/>
-                </main>
+                <Topic topic={this.props.topic}/>
 
                 <Footer/>
             </div>

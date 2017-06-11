@@ -12,6 +12,7 @@ export default class HelpPage extends React.Component<any, any> {
                         <h1>Help</h1>
                     </Container>
                 </header>
+
                 <main>
                     <Container>
                         <p>...</p>
