@@ -1,9 +1,9 @@
-import {action, observable} from "mobx"
 import {observer} from "mobx-react"
 import * as React from "react"
-import {Button, Container, Divider, Image, Item, Modal} from "semantic-ui-react"
+import {Button, Container, Divider, Item} from "semantic-ui-react"
 
 import TopicStore from "../stores/TopicStore"
+import ImageModal from "./ImageModal"
 import Post from "./Post"
 import PostForm from "./PostForm"
 
@@ -14,9 +14,7 @@ interface IProps {
 @observer
 export default class Topic extends React.Component<IProps, any> {
 
-    @observable public isModalOpen = false
-
-    public modalImage: string
+    private handleOpenModalCb: (image: string) => void
 
     public render() {
         return (
@@ -25,6 +23,10 @@ export default class Topic extends React.Component<IProps, any> {
                     <PostForm/>
                     <Divider/>
                 </Container>
+
+                <ImageModal
+                    openCallback={(cb: (image: string) => void) => {this.handleOpenModalCb = cb}}
+                />
 
                 <Container>
                     <Item.Group divided>
@@ -37,14 +39,6 @@ export default class Topic extends React.Component<IProps, any> {
                         ))}
                     </Item.Group>
 
-                    <Modal basic={true}
-                           open={this.isModalOpen}
-                           onClose={this.closeModal}
-                           style={{textAlign: "center"}}
-                    >
-                        <Image wrapped src={this.modalImage} />
-                    </Modal>
-
                     <Divider/>
                 </Container>
 
@@ -56,13 +50,8 @@ export default class Topic extends React.Component<IProps, any> {
         )
     }
 
-    @action private openModal = (src: string) => {
-        this.modalImage = src
-        this.isModalOpen = true
-    }
-
-    @action private closeModal = () => {
-        this.isModalOpen = false
+    private openModal = (image: string) => {
+        this.handleOpenModalCb(image)
     }
 
     private pagingPrevious = () => {
