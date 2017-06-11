@@ -1,13 +1,14 @@
 import {observer} from "mobx-react"
 import * as moment from "moment"
 import * as React from "react"
-import {Comment, Item} from "semantic-ui-react"
+import {Button, Comment, Form, Item} from "semantic-ui-react"
 
 import PostModel from "../models/PostModel"
 import PostComment from "./PostComment"
 
 interface IProps {
     post?: PostModel
+    openModal: (src: string) => void
 }
 
 @observer
@@ -21,6 +22,7 @@ export default class Post extends React.Component<IProps, any> {
                     <Item.Image
                         src={post.photos[0].original.url}
                         size="medium"
+                        onClick={() => this.props.openModal(post.photos[0].original.url)}
                     />
                 )}
 
