@@ -25,7 +25,7 @@ module.exports = env => {
             filename: '[name].[hash].js',
             sourceMapFilename: '[name].[hash].map.js',
             path: path.resolve(__dirname, 'dist'),
-            // publicPath: '/', can uncomment if you want everything relative to root '/'
+            publicPath: '/',
         },
         module: {
             rules: [
