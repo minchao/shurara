@@ -5,6 +5,7 @@ import {Button, Container, Divider, Image, Item, Modal} from "semantic-ui-react"
 
 import TopicStore from "../stores/TopicStore"
 import Post from "./Post"
+import PostForm from "./PostForm"
 
 interface IProps {
     topic: TopicStore
@@ -20,6 +21,11 @@ export default class Topic extends React.Component<IProps, any> {
     public render() {
         return (
             <div>
+                <Container textAlign="right">
+                    <PostForm/>
+                    <Divider/>
+                </Container>
+
                 <Container>
                     <Item.Group divided>
                         {this.props.topic.posts.map((post) => (
