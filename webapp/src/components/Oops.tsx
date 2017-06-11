@@ -1,5 +1,5 @@
 import * as React from "react"
-import {Message} from "semantic-ui-react"
+import {Container, Message} from "semantic-ui-react"
 
 interface IProps {
     error: string
@@ -11,15 +11,19 @@ export default class Oops extends React.Component<IProps, any> {
         return (
             <div>
                 <header>
-                    <h1>Oops!</h1>
+                    <Container>
+                        <h1>Oops!</h1>
+                    </Container>
                 </header>
                 <main>
-                    <Message negative>
-                        <Message.Header>{this.props.error}</Message.Header>
-                        {this.props.errorMessage &&
-                            <p>{this.props.errorMessage}</p>
-                        }
-                    </Message>
+                    <Container>
+                        <Message negative>
+                            <Message.Header>{this.props.error}</Message.Header>
+                            {this.props.errorMessage &&
+                                <p>{this.props.errorMessage}</p>
+                            }
+                        </Message>
+                    </Container>
                 </main>
             </div>
         )

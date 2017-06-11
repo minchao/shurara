@@ -20,25 +20,27 @@ export default class Topic extends React.Component<IProps, any> {
     public render() {
         return (
             <div>
-                <Item.Group divided>
-                    {this.props.topic.posts.map((post) => (
-                        <Post
-                            post={post}
-                            key={post.id}
-                            openModal={this.openModal}
-                        />
-                    ))}
-                </Item.Group>
+                <Container>
+                    <Item.Group divided>
+                        {this.props.topic.posts.map((post) => (
+                            <Post
+                                post={post}
+                                key={post.id}
+                                openModal={this.openModal}
+                            />
+                        ))}
+                    </Item.Group>
 
-                <Modal basic={true}
-                       open={this.isModalOpen}
-                       onClose={this.closeModal}
-                       style={{textAlign: "center"}}
-                >
-                    <Image wrapped src={this.modalImage} />
-                </Modal>
+                    <Modal basic={true}
+                           open={this.isModalOpen}
+                           onClose={this.closeModal}
+                           style={{textAlign: "center"}}
+                    >
+                        <Image wrapped src={this.modalImage} />
+                    </Modal>
 
-                <Divider/>
+                    <Divider/>
+                </Container>
 
                 <Container textAlign="center">
                     <Button onClick={this.pagingPrevious}>Prev</Button>

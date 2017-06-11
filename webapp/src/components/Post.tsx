@@ -1,13 +1,13 @@
 import {observer} from "mobx-react"
 import * as moment from "moment"
 import * as React from "react"
-import {Button, Comment, Form, Item} from "semantic-ui-react"
+import {Comment, Item} from "semantic-ui-react"
 
 import PostModel from "../models/PostModel"
 import PostComment from "./PostComment"
 
 interface IProps {
-    post?: PostModel
+    post: PostModel
     openModal: (src: string) => void
 }
 

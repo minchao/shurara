@@ -1,8 +1,9 @@
 import {inject, observer} from "mobx-react"
 import * as React from "react"
-import {Divider} from "semantic-ui-react"
+import {Container, Divider} from "semantic-ui-react"
 
 import TopicStore from "../stores/TopicStore"
+import Footer from "./Footer"
 import Oops from "./Oops"
 import Topic from "./Topic"
 
@@ -25,17 +26,21 @@ export default class HomePage extends React.Component<IProps, any> {
         return (
             <div>
                 <header>
-                    <h1>{topic.name}</h1>
-                    {topic &&
-                        <p>{this.props.topic.topic.summary}</p>
-                    }
-                </header>
+                    <Container>
+                        <h1>{topic.name}</h1>
+                        {topic &&
+                            <p>{this.props.topic.topic.summary}</p>
+                        }
+                        <Divider/>
+                    </Container>
 
-                <Divider/>
+                </header>
 
                 <main>
                     <Topic topic={this.props.topic}/>
                 </main>
+
+                <Footer/>
             </div>
         )
     }
