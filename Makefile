@@ -1,4 +1,4 @@
-.PHONY: build build-with-docker clean
+.PHONY: build build-with-docker clean docker-build
 
 build: clean
 	@echo Building app
@@ -11,3 +11,9 @@ build-with-docker:
 clean:
 	@echo Cleaning up previous build data
 	rm shurara
+
+docker-build: build-with-docker
+	@echo Building Docker image
+	cd webapp && make build-with-docker
+	cd ..
+	docker build -t minchao/shurara.com:latest .
