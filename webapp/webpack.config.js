@@ -62,7 +62,11 @@ module.exports = env => {
                     return module.context && module.context.indexOf('node_modules') !== -1;
                 }
             }),
-            new webpack.HotModuleReplacementPlugin(),
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, './src/index.html'),
+                filename: 'index.html',
+                inject: 'body',
+            }),
             new ExtractTextPlugin({
                 filename: "[name].[hash].css"
             }),
@@ -78,11 +82,8 @@ module.exports = env => {
                 },
                 sourceMap: false,
             })),
-            new HtmlWebpackPlugin({
-                template: path.resolve(__dirname, './src/index.html'),
-                filename: 'index.html',
-                inject: 'body',
-            }),
+            ifDev(new webpack.HotModuleReplacementPlugin()),
+            ifDev(new webpack.NamedModulesPlugin()),
         ]),
     }
 }
