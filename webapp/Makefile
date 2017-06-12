@@ -1,4 +1,4 @@
-.PHONY: yarn-install build docker-build clean
+.PHONY: yarn-install build build-with-docker clean
 
 yarn-install: clean
 	@echo Getting dependencies using yarn
@@ -8,7 +8,7 @@ build: yarn-install
 	@echo Building webapp
 	yarn run build
 
-docker-build:
+build-with-docker:
 	@echo Building webapp with Docker
 	docker run --rm -v $(PWD):/shurara -w /shurara node:6.11 sh -c "make build"
 
