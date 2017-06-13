@@ -10,7 +10,7 @@ build-with-docker:
 
 clean:
 	@echo Cleaning up previous build data
-	rm shurara
+	rm -f shurara
 
 docker-build: build-with-docker
 	@echo Building Docker image
