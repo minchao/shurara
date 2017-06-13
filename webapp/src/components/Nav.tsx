@@ -1,6 +1,7 @@
 import {inject, observer} from "mobx-react"
 import {RouterStore} from "mobx-react-router"
 import * as React from "react"
+import {Icon} from "semantic-ui-react"
 
 interface IProps {
     routing?: RouterStore
@@ -18,8 +19,8 @@ export default class Nav extends React.Component<IProps, any> {
 
         return (
             <nav className="ui fixed menu navbar">
-                <a className={isActive("/")} onClick={() => push("/")}>Home</a>
-                <a className={isActive("/help")} onClick={() => push("/help")}>Help</a>
+                <a className={isActive("/")} onClick={() => push("/")}><Icon name="home"/>Home</a>
+                <a className={isActive("/help")} onClick={() => push("/help")}><Icon name="help"/>Help</a>
             </nav>
         )
     }
