@@ -5,6 +5,7 @@ import {Comment, Item} from "semantic-ui-react"
 
 import PostModel from "../models/PostModel"
 import PostComment from "./PostComment"
+import PostReply from "./PostReply"
 
 interface IProps {
     post: PostModel
@@ -31,7 +32,7 @@ export default class Post extends React.Component<IProps, any> {
                         {post.user.name}
                         <span className="postTimestamp">{moment(post.timestamp).fromNow()}</span>
                     </Item.Header>
-                    <Item.Description>{post.body}</Item.Description>
+                    <Item.Description style={{marginBottom: 20}}>{post.body}</Item.Description>
 
                     {post.comments.length > 0 &&
                         <Comment.Group>
@@ -40,6 +41,8 @@ export default class Post extends React.Component<IProps, any> {
                         ))}
                         </Comment.Group>
                     }
+
+                    <PostReply post={post}/>
                 </Item.Content>
             </Item>
         )
