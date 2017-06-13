@@ -1,7 +1,8 @@
-import {observer} from "mobx-react"
+import {inject, observer} from "mobx-react"
 import * as React from "react"
 import {Button, Container, Divider, Item} from "semantic-ui-react"
 
+import PostFormStore from "../stores/PostFormStore"
 import TopicStore from "../stores/TopicStore"
 import ImageModal from "./ImageModal"
 import Post from "./Post"
@@ -9,8 +10,10 @@ import PostForm from "./PostForm"
 
 interface IProps {
     topic: TopicStore
+    postForm?: PostFormStore
 }
 
+@inject("postForm")
 @observer
 export default class Topic extends React.Component<IProps, any> {
 
@@ -20,7 +23,7 @@ export default class Topic extends React.Component<IProps, any> {
         return (
             <main>
                 <Container textAlign="right">
-                    <PostForm/>
+                    <PostForm store={this.props.postForm}/>
                     <Divider/>
                 </Container>
 

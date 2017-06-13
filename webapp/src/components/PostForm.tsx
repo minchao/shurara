@@ -1,21 +1,21 @@
 import {action, observable} from "mobx"
-import {inject, observer} from "mobx-react"
+import {observer} from "mobx-react"
 import * as React from "react"
 import {Button, Form, Message, Modal} from "semantic-ui-react"
 
-@inject("postForm")
+import {IError} from "../services/API"
+import PostFormStore from "../stores/PostFormStore"
+
+interface IProps {
+    store: PostFormStore
+}
+
 @observer
-export default class PostForm extends React.Component<any, any> {
+export default class PostForm extends React.Component<IProps, any> {
 
     @observable private open: boolean = false
 
     @observable private loading: boolean = false
-
-    @observable private error: boolean = false
-
-    @observable private title: string
-
-    @observable private content: string
 
     public render() {
         const errorMessage = (
@@ -39,7 +39,7 @@ export default class PostForm extends React.Component<any, any> {
                 onClose={this.handleClose}
             >
                 <Modal.Content>
-                    {this.error && errorMessage}
+                    {this.props.store.error && errorMessage}
                     <Form>
                         <Form.Field>
                             <input
@@ -80,7 +80,7 @@ export default class PostForm extends React.Component<any, any> {
     @action private handleOpen = () => {
         this.open = true
         this.loading = false
-        this.error = false
+        this.props.store.reset()
     }
 
     @action private handleClose = () => {
@@ -89,18 +89,21 @@ export default class PostForm extends React.Component<any, any> {
 
     @action private handleSubmit = () => {
         this.loading = true
-
-        setTimeout(() => {
+        this.props.store.post((josn: object, error?: IError) => {
             this.loading = false
-            this.error = true
-        }, 500)
+            if (error === null) {
+                this.open = false
+            } else {
+                this.props.store.setError(true)
+            }
+        })
     }
 
-    @action private handleTitleChange = (event: any) => {
-        this.title = event.target.value
+    private handleTitleChange = (event: any) => {
+        this.props.store.setTitle(event.target.value)
     }
 
-    @action private handleContentChange = (event: any) => {
-        this.content = event.target.value
+    private handleContentChange = (event: any) => {
+        this.props.store.setContent(event.target.value)
     }
 }

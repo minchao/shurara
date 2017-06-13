@@ -5,6 +5,7 @@ import {RouterStore, syncHistoryWithStore} from "mobx-react-router"
 import * as React from "react"
 import {Route, Router} from "react-router"
 
+import PostFormStore from "../stores/PostFormStore"
 import TopicStore from "../stores/TopicStore"
 import HelpPage from "./HelpPage"
 import HomePage from "./HomePage"
@@ -16,6 +17,7 @@ const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
 const history = syncHistoryWithStore(browserHistory, routingStore)
 const stores = {
+    postForm: new PostFormStore(),
     routing: routingStore,
     topic: TopicStore.fromJS(data),
 }
