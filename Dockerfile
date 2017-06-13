@@ -5,8 +5,9 @@ RUN mkdir /shurara
 
 COPY shurara /shurara/
 COPY webapp/dist /shurara/webapp/dist/
+COPY docker-entrypoint.sh /
 
-WORKDIR /shurara
-ENTRYPOINT ["/shurara/shurara"]
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT /docker-entrypoint.sh
 
 EXPOSE 8080
