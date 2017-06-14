@@ -44,11 +44,15 @@ export default class PostForm extends React.Component<IProps, any> {
                         <Form.Field>
                             <input
                                 placeholder="Your Name"
-                                onChange={this.handleTitleChange}
+                                onChange={this.handleNameChange}
                             />
                         </Form.Field>
                         <Form.Field>
-                            <input type="file" placeholder="Photo"/>
+                            <input
+                                type="file"
+                                placeholder="Photo"
+                                onChange={this.handlePhotoChange}
+                            />
                         </Form.Field>
                         <Form.Field>
                             <Form.TextArea
@@ -88,10 +92,14 @@ export default class PostForm extends React.Component<IProps, any> {
     }
 
     @action private handleSubmit = () => {
+        if (this.props.store.photo === undefined && this.props.store.content === "") {
+            this.props.store.setError(true)
+            return
+        }
         this.loading = true
         this.props.store.post((josn: object, error?: IError) => {
             this.loading = false
-            if (error === null) {
+            if (error === undefined) {
                 this.open = false
             } else {
                 this.props.store.setError(true)
@@ -99,11 +107,15 @@ export default class PostForm extends React.Component<IProps, any> {
         })
     }
 
-    private handleTitleChange = (event: any) => {
-        this.props.store.setTitle(event.target.value)
+    private handleNameChange = (event: any) => {
+        this.props.store.setName(event.target.value)
     }
 
     private handleContentChange = (event: any) => {
         this.props.store.setContent(event.target.value)
+    }
+
+    private handlePhotoChange = (event: any) => {
+        this.props.store.setPhoto(event.target.files[0])
     }
 }

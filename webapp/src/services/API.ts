@@ -1,18 +1,34 @@
 export interface IError {
     error: string
-    errorMessage?: string
+    errorDescription?: string
 }
 
 class API {
     public postPost(post: any, callback: (json: object, error?: IError) => void) {
-        // TODO
-        setTimeout(() => {
-            if (!post.content) {
-                callback({}, {error: "bad_request"})
-                return
-            }
-            callback({}, null)
-        }, 500)
+        const data = new FormData()
+        data.append("name", post.name)
+        data.append("content", post.content)
+        data.append("photo", post.photo)
+
+        fetch(
+            API_HOST + "/api/post",
+            {
+                body: data,
+                method: "post",
+            },
+        ).then(
+            (res) => {
+                if (res.ok) {
+                    callback(res.json())
+                } else {
+                    callback(res.json(), {error: "bad_request"})
+                }
+            },
+        ).catch(
+            (error) => {
+                callback({}, {error: "exception", errorDescription: error})
+            },
+        )
     }
 }
 

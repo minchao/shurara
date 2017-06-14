@@ -55,11 +55,14 @@ module.exports = env => {
             ],
         },
         plugins: removeEmpty([
+            new webpack.DefinePlugin({
+                API_HOST: JSON.stringify(env === "production" ? "" : "http://localhost:8080"),
+            }),
             new webpack.optimize.CommonsChunkPlugin({
                 name: 'vendor',
                 minChunks: function (module) {
                     // this assumes your vendor imports exist in the node_modules directory
-                    return module.context && module.context.indexOf('node_modules') !== -1;
+                    return module.context && module.context.indexOf('node_modules') !== -1
                 }
             }),
             new HtmlWebpackPlugin({

@@ -6,25 +6,32 @@ export default class PostFormStore {
 
     @observable public topicId: string
 
-    @observable public title: string
+    @observable public name: string
 
     @observable public content: string
+
+    @observable public photo?: File
 
     @observable public error: boolean = false
 
     @action public reset() {
         this.topicId = ""
-        this.title = ""
+        this.name = ""
         this.content = ""
+        this.photo = undefined
         this.error = false
     }
 
-    @action public setTitle(title: string) {
-        this.title = title
+    @action public setName(name: string) {
+        this.name = name
     }
 
     @action public setContent(content: string) {
         this.content = content
+    }
+
+    @action public setPhoto(photo: any) {
+        this.photo = photo
     }
 
     @action public setError(error: boolean) {
@@ -34,7 +41,8 @@ export default class PostFormStore {
     public post(cb: (json: object, error: object) => void) {
         api.postPost({
             content: this.content,
-            title: this.title,
+            name: this.name,
+            photo: this.photo,
             topicId: this.topicId,
         }, cb)
     }
