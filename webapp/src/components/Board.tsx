@@ -2,20 +2,20 @@ import {inject, observer} from "mobx-react"
 import * as React from "react"
 import {Button, Container, Divider, Item} from "semantic-ui-react"
 
+import BoardStore from "../stores/BoardStore"
 import PostFormStore from "../stores/PostFormStore"
-import TopicStore from "../stores/TopicStore"
 import ImageModal from "./ImageModal"
 import Post from "./Post"
 import PostForm from "./PostForm"
 
 interface IProps {
-    topic: TopicStore
+    board: BoardStore
     postForm?: PostFormStore
 }
 
 @inject("postForm")
 @observer
-export default class Topic extends React.Component<IProps, any> {
+export default class Board extends React.Component<IProps, any> {
 
     private handleOpenModalCb: (image: string) => void
 
@@ -23,7 +23,7 @@ export default class Topic extends React.Component<IProps, any> {
         return (
             <main>
                 <Container textAlign="right">
-                    <PostForm store={this.props.postForm}/>
+                    <PostForm board={this.props.board} form={this.props.postForm}/>
                     <Divider/>
                 </Container>
 
@@ -33,7 +33,7 @@ export default class Topic extends React.Component<IProps, any> {
 
                 <Container>
                     <Item.Group divided>
-                        {this.props.topic.posts.map((post) => (
+                        {this.props.board.posts.map((post) => (
                             <Post
                                 post={post}
                                 key={post.id}

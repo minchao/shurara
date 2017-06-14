@@ -4,10 +4,12 @@ import * as React from "react"
 import {Button, Form, Message, Modal} from "semantic-ui-react"
 
 import {IError} from "../services/API"
+import BoardStore from "../stores/BoardStore"
 import PostFormStore from "../stores/PostFormStore"
 
 interface IProps {
-    store: PostFormStore
+    board: BoardStore
+    form: PostFormStore
 }
 
 @observer
@@ -39,7 +41,7 @@ export default class PostForm extends React.Component<IProps, any> {
                 onClose={this.handleClose}
             >
                 <Modal.Content>
-                    {this.props.store.error && errorMessage}
+                    {this.props.form.error && errorMessage}
                     <Form>
                         <Form.Field>
                             <input
@@ -84,7 +86,8 @@ export default class PostForm extends React.Component<IProps, any> {
     @action private handleOpen = () => {
         this.open = true
         this.loading = false
-        this.props.store.reset()
+        this.props.form.reset()
+        this.props.form.setBoard(this.props.board.board.slug)
     }
 
     @action private handleClose = () => {
@@ -92,30 +95,30 @@ export default class PostForm extends React.Component<IProps, any> {
     }
 
     @action private handleSubmit = () => {
-        if (this.props.store.photo === undefined && this.props.store.content === "") {
-            this.props.store.setError(true)
+        if (this.props.form.photo === undefined && this.props.form.content === "") {
+            this.props.form.setError(true)
             return
         }
         this.loading = true
-        this.props.store.post((josn: object, error?: IError) => {
+        this.props.form.post((josn: object, error?: IError) => {
             this.loading = false
             if (error === undefined) {
                 this.open = false
             } else {
-                this.props.store.setError(true)
+                this.props.form.setError(true)
             }
         })
     }
 
     private handleNameChange = (event: any) => {
-        this.props.store.setName(event.target.value)
+        this.props.form.setName(event.target.value)
     }
 
     private handleContentChange = (event: any) => {
-        this.props.store.setContent(event.target.value)
+        this.props.form.setContent(event.target.value)
     }
 
     private handlePhotoChange = (event: any) => {
-        this.props.store.setPhoto(event.target.files[0])
+        this.props.form.setPhoto(event.target.files[0])
     }
 }

@@ -1,4 +1,4 @@
-export interface ITopic {
+export interface IBoard {
     name: string
     slug: string
     summary: string

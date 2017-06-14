@@ -2,24 +2,24 @@ import {inject, observer} from "mobx-react"
 import * as React from "react"
 import {Container, Divider} from "semantic-ui-react"
 
-import TopicStore from "../stores/TopicStore"
+import BoardStore from "../stores/BoardStore"
+import Board from "./Board"
 import Footer from "./Footer"
 import Oops from "./Oops"
-import Topic from "./Topic"
 
 interface IProps {
-    topic?: TopicStore
+    board?: BoardStore
 }
 
-@inject("topic")
+@inject("board")
 @observer
 export default class HomePage extends React.Component<IProps, any> {
     public render() {
-        const topic = this.props.topic.topic
+        const board = this.props.board.board
 
-        if (!topic) {
+        if (!board) {
             return (
-                <Oops error="Topic not found"/>
+                <Oops error="Board not found"/>
             )
         }
 
@@ -27,15 +27,15 @@ export default class HomePage extends React.Component<IProps, any> {
             <div>
                 <header>
                     <Container>
-                        <h1>{topic.name}</h1>
-                        {topic &&
-                            <p>{this.props.topic.topic.summary}</p>
+                        <h1>{board.name}</h1>
+                        {board &&
+                            <p>{this.props.board.board.summary}</p>
                         }
                         <Divider/>
                     </Container>
                 </header>
 
-                <Topic topic={this.props.topic}/>
+                <Board board={this.props.board}/>
 
                 <Footer/>
             </div>
