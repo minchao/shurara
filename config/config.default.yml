@@ -1,0 +1,15 @@
+http:
+  api:
+    cors:
+      enable: false
+      origins:
+        - # "http://127.0.0.1:8080"
+      headers:
+        - "*"
+      methods:
+        - "GET"
+        - "POST"
+        - "PUT"
+        - "PATCH"
+        - "DELETE"
+      debug: false
