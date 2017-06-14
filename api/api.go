@@ -16,7 +16,7 @@ func Init(rootRouter *mux.Router) {
 
 	router := mux.NewRouter().PathPrefix("/api").Subrouter().StrictSlash(true)
 	router.HandleFunc("/", ok).Methods("GET")
-	router.HandleFunc("/post", postPost).Methods("POST")
+	router.HandleFunc("/board/{board}/post", postBoardPost).Methods("POST")
 
 	n := negroni.New()
 
@@ -32,6 +32,11 @@ func Init(rootRouter *mux.Router) {
 	n.UseHandler(router)
 
 	rootRouter.PathPrefix("/api").Handler(n)
+}
+
+type errorMessage struct {
+	Error            string      `json:"error"`
+	ErrorDescription interface{} `json:"error_description,omitempty"`
 }
 
 func render(w http.ResponseWriter, code int, data interface{}) error {

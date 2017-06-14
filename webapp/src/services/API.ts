@@ -8,10 +8,12 @@ class API {
         const data = new FormData()
         data.append("name", post.name)
         data.append("content", post.content)
-        data.append("photo", post.photo)
+        if (post.photo !== undefined) {
+            data.append("photo", post.photo)
+        }
 
         fetch(
-            API_HOST + "/api/post",
+            API_HOST + `/api/board/${post.board}/post`,
             {
                 body: data,
                 method: "post",
