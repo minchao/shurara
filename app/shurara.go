@@ -5,6 +5,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
+	"github.com/minchao/shurara/api"
 	config "github.com/spf13/viper"
 	"github.com/urfave/negroni"
 )
@@ -24,6 +25,11 @@ func (s *Server) Run() {
 		router *mux.Router
 	)
 
+	router = mux.NewRouter().StrictSlash(true)
+
+	// Serving APIs
+	api.Init(router)
+
 	// Serving static files
 	dir := http.Dir(dist)
 	f, err := dir.Open("index.html")
@@ -31,8 +37,6 @@ func (s *Server) Run() {
 		logrus.Fatalf("The '%s' directory not found", dist)
 	}
 	f.Close()
-
-	router = mux.NewRouter().StrictSlash(true)
 	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(dir)))
 
 	n := negroni.New()
