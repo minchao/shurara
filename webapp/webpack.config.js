@@ -3,9 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
 
-module.exports = env => {
-    const ifProd = plugin => env == 'production' ? plugin : undefined
-    const ifDev = plugin => env == 'development' ? plugin : undefined
+module.exports = () => {
+    const env = process.env.NODE_ENV
+    const ifProd = plugin => (env === 'production') ? plugin : undefined
+    const ifDev = plugin => (env === 'development') ? plugin : undefined
     const removeEmpty = array => array.filter(p => !!p)
 
     return {
@@ -56,14 +57,14 @@ module.exports = env => {
         },
         plugins: removeEmpty([
             new webpack.DefinePlugin({
-                API_HOST: JSON.stringify(env === "production" ? "" : "http://localhost:8080"),
+                API_HOST: JSON.stringify(env === 'development' ? 'http://localhost:8080' : ''),
             }),
             new webpack.optimize.CommonsChunkPlugin({
                 name: 'vendor',
                 minChunks: function (module) {
                     // this assumes your vendor imports exist in the node_modules directory
                     return module.context && module.context.indexOf('node_modules') !== -1
-                }
+                },
             }),
             new HtmlWebpackPlugin({
                 template: path.resolve(__dirname, './src/index.html'),
@@ -71,7 +72,7 @@ module.exports = env => {
                 inject: 'body',
             }),
             new ExtractTextPlugin({
-                filename: "[name].[hash].css"
+                filename: '[name].[hash].css',
             }),
             ifProd(new webpack.optimize.UglifyJsPlugin({
                 compress: {
