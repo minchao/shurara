@@ -1,15 +1,26 @@
 package api
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
+	"github.com/minchao/shurara/model"
 )
 
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
-	render(w, http.StatusOK, nil)
+	var board model.Board
+
+	file, _ := ioutil.ReadFile("./model/board_example.json")
+	err := json.Unmarshal(file, &board)
+	if err != nil {
+		log.Errorln(err)
+	}
+
+	render(w, http.StatusOK, board)
 }
 
 type boardPost struct {
@@ -36,6 +47,7 @@ func (s *Server) postBoardPost(w http.ResponseWriter, r *http.Request) {
 	_, hasPhone := r.MultipartForm.File["photo"]
 	if len(post.Content) == 0 && !hasPhone {
 		render(w, http.StatusBadRequest, errorMessage{Error: "bad_request"})
+		return
 	}
 	if hasPhone {
 		var err error

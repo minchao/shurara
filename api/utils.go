@@ -19,7 +19,7 @@ func render(w http.ResponseWriter, code int, data interface{}) error {
 	return json.NewEncoder(w).Encode(data)
 }
 
-func ok(w http.ResponseWriter, r *http.Request) {
+func ok(w http.ResponseWriter, _ *http.Request) {
 	data := struct {
 		Ok bool `json:"ok"`
 	}{
