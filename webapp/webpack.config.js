@@ -57,6 +57,7 @@ module.exports = () => {
         },
         plugins: removeEmpty([
             new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify(env),
                 API_HOST: JSON.stringify(env === 'development' ? 'http://localhost:8080' : ''),
             }),
             new webpack.optimize.CommonsChunkPlugin({
