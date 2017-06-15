@@ -1,10 +1,35 @@
 export interface IError {
     error: string
-    errorDescription?: string
+    error_description?: string
 }
 
 class API {
-    public postPost(post: any, callback: (json: object, error?: IError) => void) {
+    public fetch(url: string, object: object, callback: (json: object, error?: IError) => void) {
+        fetch(
+            API_HOST + url,
+            object,
+        ).then(
+            (res) => {
+                if (res.ok) {
+                    return res.json().then((json) => callback(json))
+                } else if (res.status >= 400 && res.status <= 499) {
+                    return res.json().then((json) => callback({}, json))
+                }
+
+                throw new Error(res.statusText)
+            },
+        ).catch(
+            (error) => {
+                callback({}, {error: "exception", error_description: error})
+            },
+        )
+    }
+
+    public getBoard(boardId: string, callback: (json: object, error?: IError) => void) {
+        this.fetch(`/api/boards/${boardId}`, {}, callback)
+    }
+
+    public postBoardPost(post: any, callback: (json: object, error?: IError) => void) {
         const data = new FormData()
         data.append("name", post.name)
         data.append("content", post.content)
@@ -12,25 +37,7 @@ class API {
             data.append("photo", post.photo)
         }
 
-        fetch(
-            API_HOST + `/api/boards/${post.board}/posts`,
-            {
-                body: data,
-                method: "post",
-            },
-        ).then(
-            (res) => {
-                if (res.ok) {
-                    callback(res.json())
-                } else {
-                    callback(res.json(), {error: "bad_request"})
-                }
-            },
-        ).catch(
-            (error) => {
-                callback({}, {error: "exception", errorDescription: error})
-            },
-        )
+        this.fetch(`/api/boards/${post.board}/posts`, {body: data, method: "post"}, callback)
     }
 }
 
