@@ -4,21 +4,12 @@ import (
 	"mime/multipart"
 	"net/http"
 
-	"github.com/Sirupsen/logrus"
-	"github.com/go-playground/form"
+	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 )
 
-var decoder = form.NewDecoder()
-
-func ok(w http.ResponseWriter, r *http.Request) {
-	data := struct {
-		Ok bool `json:"ok"`
-	}{
-		Ok: true,
-	}
-
-	render(w, http.StatusOK, data)
+func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
+	render(w, http.StatusOK, nil)
 }
 
 type boardPost struct {
@@ -29,16 +20,16 @@ type boardPost struct {
 type boardPostResult struct {
 }
 
-func postBoardPost(w http.ResponseWriter, r *http.Request) {
+func (s *Server) postBoardPost(w http.ResponseWriter, r *http.Request) {
 	var (
-		vars  = mux.Vars(r)
-		board string
-		post  boardPost
-		file  multipart.File
+		vars    = mux.Vars(r)
+		boardId string
+		post    boardPost
+		file    multipart.File
 		//header *multipart.FileHeader
 	)
 
-	board, _ = vars["board"]
+	boardId, _ = vars["board_id"]
 	r.ParseMultipartForm(32 << 20)
 	decoder.Decode(&post, r.Form)
 
@@ -56,8 +47,8 @@ func postBoardPost(w http.ResponseWriter, r *http.Request) {
 		defer file.Close()
 	}
 
-	logrus.Debugf("board: %s, name: %s, content: %s",
-		board,
+	log.Debugf("boardId: %s, name: %s, content: %s",
+		boardId,
 		post.Name,
 		post.Content)
 

@@ -1,22 +1,33 @@
 package api
 
 import (
-	"encoding/json"
-	"net/http"
-
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
+	"github.com/go-playground/form"
 	"github.com/gorilla/mux"
+	"github.com/minchao/shurara/app"
 	"github.com/rs/cors"
 	config "github.com/spf13/viper"
 	"github.com/urfave/negroni"
 )
 
-func Init(rootRouter *mux.Router) {
-	logrus.Debug("api.Init")
+var decoder = form.NewDecoder()
 
+type Server struct {
+	app *app.Server
+}
+
+func Init(app *app.Server) {
+	log.Debug("api.Init")
+
+	server := Server{app: app}
+	server.init()
+}
+
+func (s *Server) init() {
 	router := mux.NewRouter().PathPrefix("/api").Subrouter().StrictSlash(true)
 	router.HandleFunc("/", ok).Methods("GET")
-	router.HandleFunc("/board/{board}/post", postBoardPost).Methods("POST")
+	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}", s.getBoard).Methods("GET")
+	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}/posts", s.postBoardPost).Methods("POST")
 
 	n := negroni.New()
 
@@ -31,19 +42,5 @@ func Init(rootRouter *mux.Router) {
 
 	n.UseHandler(router)
 
-	rootRouter.PathPrefix("/api").Handler(n)
-}
-
-type errorMessage struct {
-	Error            string      `json:"error"`
-	ErrorDescription interface{} `json:"error_description,omitempty"`
-}
-
-func render(w http.ResponseWriter, code int, data interface{}) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(code)
-	if data == nil {
-		return nil
-	}
-	return json.NewEncoder(w).Encode(data)
+	s.app.Router.PathPrefix("/api").Handler(n)
 }

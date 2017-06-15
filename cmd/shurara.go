@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
+	"github.com/minchao/shurara/api"
 	"github.com/minchao/shurara/app"
 	"github.com/spf13/cobra"
 )
@@ -25,10 +26,11 @@ func Execute() {
 
 func rootCmdF(cmd *cobra.Command, args []string) {
 	if err := initEnv(cmd); err != nil {
-		logrus.Fatalln(err)
+		log.Fatalln(err)
 		return
 	}
 
 	server := app.New()
+	api.Init(server)
 	server.Run()
 }

@@ -13,7 +13,7 @@ class API {
         }
 
         fetch(
-            API_HOST + `/api/board/${post.board}/post`,
+            API_HOST + `/api/boards/${post.board}/posts`,
             {
                 body: data,
                 method: "post",
