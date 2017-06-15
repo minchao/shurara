@@ -1,0 +1,70 @@
+hash: 91baade9896657f5fe55ece1295e324170d73d82e57fb9e5dc60042dd2fe0195
+updated: 2017-06-15T00:25:31.324221694+08:00
+imports:
+- name: github.com/fsnotify/fsnotify
+  version: fd9ec7deca8bf46ecd2a795baaacf2b3a9be1197
+- name: github.com/go-playground/form
+  version: d18f24949d2fcf4b367cff1424a9e1a60dd5507f
+- name: github.com/gorilla/context
+  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
+- name: github.com/gorilla/mux
+  version: 757bef944d0f21880861c2dd9c871ca543023cba
+- name: github.com/hashicorp/hcl
+  version: eb6f65b2d77ed5078887f960ff570fbddbbeb49d
+  subpackages:
+  - hcl/ast
+  - hcl/parser
+  - hcl/scanner
+  - hcl/strconv
+  - hcl/token
+  - json/parser
+  - json/scanner
+  - json/token
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/magiconair/properties
+  version: b3b15ef068fd0b17ddf408a23669f20811d194d2
+- name: github.com/mitchellh/mapstructure
+  version: bfdb1a85537d60bc7e954e600c250219ea497417
+- name: github.com/pelletier/go-buffruneio
+  version: df1e16fde7fc330a0ca68167c23bf7ed6ac31d6d
+- name: github.com/pelletier/go-toml
+  version: 439fbba1f887c286024370cb4f281ba815c4c7d7
+- name: github.com/rs/cors
+  version: a62a804a8a009876ca59105f7899938a1349f4b3
+- name: github.com/rs/xhandler
+  version: ed27b6fd65218132ee50cd95f38474a3d8a2cd12
+- name: github.com/Sirupsen/logrus
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+- name: github.com/spf13/afero
+  version: 72b31426848c6ef12a7a8e216708cb0d1530f074
+  subpackages:
+  - mem
+- name: github.com/spf13/cast
+  version: acbeb36b902d72a7a4c18e8f3241075e7ab763e4
+- name: github.com/spf13/cobra
+  version: 8f0203be891287870100e4af46262cdf4a4261d1
+- name: github.com/spf13/jwalterweatherman
+  version: fa7ca7e836cf3a8bb4ebf799f472c12d7e903d66
+- name: github.com/spf13/pflag
+  version: c990990ab4981d84da820b7b00c85139ca150b5f
+- name: github.com/spf13/viper
+  version: 0967fc9aceab2ce9da34061253ac10fb99bba5b2
+- name: github.com/urfave/negroni
+  version: 46eece4d3b43dd330e141b20adf0ce9b2b35ba53
+- name: golang.org/x/net
+  version: f2499483f923065a842d38eb4c7f1927e6fc6e6d
+  subpackages:
+  - context
+- name: golang.org/x/sys
+  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  subpackages:
+  - unix
+- name: golang.org/x/text
+  version: f72d8390a633d5dfb0cc84043294db9f6c935756
+  subpackages:
+  - transform
+  - unicode/norm
+- name: gopkg.in/yaml.v2
+  version: a5b47d31c556af34a302ce5d659e6fea44d90de0
+testImports: []

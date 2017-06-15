@@ -1,6 +1,11 @@
-.PHONY: build build-with-docker clean docker-build
+.PHONY: deps-install build build-with-docker clean docker-build
 
-build: clean
+deps-install: clean
+	@echo Getting dependencies using Glide
+	go get -v -u github.com/Masterminds/glide
+	glide install
+
+build: deps-install
 	@echo Building app
 	go build
 
@@ -11,6 +16,7 @@ build-with-docker:
 clean:
 	@echo Cleaning up previous build data
 	rm -f shurara
+	rm -rf vendor
 
 docker-build: build-with-docker
 	@echo Building Docker image
