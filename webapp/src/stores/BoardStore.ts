@@ -2,19 +2,45 @@ import {action, observable} from "mobx"
 
 import {IBoard, IPaging} from "../models/BoardModel"
 import PostModel from "../models/PostModel"
+import api, {IError} from "../services/API"
 
 export default class BoardStore {
     public static fromJS(js): BoardStore {
         const store = new BoardStore()
-        store.board = js.board
-        store.posts = js.posts.map((post) => {
-            return PostModel.fromJS(post)
-        })
-        store.paging = js.paging
+        store.fromJS(js)
         return store
     }
 
+    @observable public loading: boolean = false
     @observable public board: IBoard
     @observable public posts: PostModel[] = []
     @observable public paging?: IPaging
+
+    @action
+    public reset() {
+        this.board = undefined
+        this.posts = []
+        this.paging = undefined
+    }
+
+    @action
+    public fromJS(js: any) {
+        this.board = js.board
+        this.posts = js.posts.map((post) => {
+            return PostModel.fromJS(post)
+        })
+        this.paging = js.paging
+    }
+
+    @action public sync(boardId: string) {
+        this.loading = true
+        api.getBoard(boardId, (json: object, error?: IError) => {
+            if (error === undefined) {
+                this.fromJS(json)
+            } else {
+                this.reset()
+            }
+            this.loading = false
+        })
+    }
 }

@@ -11,16 +11,16 @@ import HelpPage from "./HelpPage"
 import HomePage from "./HomePage"
 import Nav from "./Nav"
 
-import * as data from "../models/example_board.json"
-
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
 const history = syncHistoryWithStore(browserHistory, routingStore)
 const stores = {
-    board: BoardStore.fromJS(data),
+    board: new BoardStore(),
     postForm: new PostFormStore(),
     routing: routingStore,
 }
+
+stores.board.sync("blog")
 
 export default class App extends React.Component<any, any> {
     public render() {

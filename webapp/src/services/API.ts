@@ -26,7 +26,7 @@ class API {
     }
 
     public getBoard(boardId: string, callback: (json: object, error?: IError) => void) {
-        this.fetch(`/api/boards/${boardId}`, {}, callback)
+        this.fetch(`/api/boards/${boardId}`, {method: "get"}, callback)
     }
 
     public postBoardPost(post: any, callback: (json: object, error?: IError) => void) {
@@ -37,7 +37,7 @@ class API {
             data.append("photo", post.photo)
         }
 
-        this.fetch(`/api/boards/${post.board}/posts`, {body: data, method: "post"}, callback)
+        this.fetch(`/api/boards/${post.board}/posts`, {method: "post", body: data}, callback)
     }
 }
 
