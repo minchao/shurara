@@ -24,8 +24,8 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 type boardPost struct {
-	Name    string `form:"name"`
-	Content string `form:"content"`
+	Name string `form:"name"`
+	Body string `form:"body"`
 }
 
 type boardPostResult struct {
@@ -44,14 +44,14 @@ func (s *Server) postBoardPost(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
 	decoder.Decode(&post, r.Form)
 
-	_, hasPhone := r.MultipartForm.File["photo"]
-	if len(post.Content) == 0 && !hasPhone {
+	_, hasImage := r.MultipartForm.File["image"]
+	if len(post.Body) == 0 && !hasImage {
 		render(w, http.StatusBadRequest, errorMessage{Error: "bad_request"})
 		return
 	}
-	if hasPhone {
+	if hasImage {
 		var err error
-		file, _, err = r.FormFile("photo")
+		file, _, err = r.FormFile("image")
 		if err != nil {
 			render(w, http.StatusBadRequest, errorMessage{Error: "bad_request"})
 			return
@@ -62,7 +62,7 @@ func (s *Server) postBoardPost(w http.ResponseWriter, r *http.Request) {
 	log.Debugf("boardId: %s, name: %s, content: %s",
 		boardId,
 		post.Name,
-		post.Content)
+		post.Body)
 
 	render(w, http.StatusOK, boardPostResult{})
 }

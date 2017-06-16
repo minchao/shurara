@@ -3,6 +3,13 @@ export interface IError {
     error_description?: string
 }
 
+export interface IBoardPostBody {
+    board: string
+    name: string
+    body: string
+    image?: File
+}
+
 class API {
     public fetch(url: string, object: object, callback: (json: object, error?: IError) => void) {
         fetch(
@@ -39,12 +46,12 @@ class API {
         this.getBoard(board, query, callback)
     }
 
-    public postBoardPost(post: any, callback: (json: object, error?: IError) => void) {
+    public postBoardPost(post: IBoardPostBody, callback: (json: object, error?: IError) => void) {
         const data = new FormData()
         data.append("name", post.name)
-        data.append("content", post.content)
-        if (post.photo !== undefined) {
-            data.append("photo", post.photo)
+        data.append("body", post.body)
+        if (post.image !== undefined) {
+            data.append("image", post.image)
         }
 
         this.fetch(`/api/boards/${post.board}/posts`, {method: "post", body: data}, callback)

@@ -6,16 +6,16 @@ export default class PostFormStore {
 
     @observable public board: string
     @observable public name: string
-    @observable public content: string
-    @observable public photo?: File
+    @observable public body: string
+    @observable public image?: File
     @observable public error: boolean = false
 
     @action
     public reset() {
         this.board = ""
         this.name = ""
-        this.content = ""
-        this.photo = undefined
+        this.body = ""
+        this.image = undefined
         this.error = false
     }
 
@@ -30,13 +30,13 @@ export default class PostFormStore {
     }
 
     @action
-    public setContent(content: string) {
-        this.content = content
+    public setBody(body: string) {
+        this.body = body
     }
 
     @action
-    public setPhoto(photo: any) {
-        this.photo = photo
+    public setImage(image: any) {
+        this.image = image
     }
 
     @action
@@ -47,9 +47,9 @@ export default class PostFormStore {
     public post(cb: (json: object, error: object) => void) {
         api.postBoardPost({
             board: this.board,
-            content: this.content,
+            body: this.body,
+            image: this.image,
             name: this.name,
-            photo: this.photo,
         }, cb)
     }
 }

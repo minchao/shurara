@@ -52,14 +52,14 @@ export default class PostForm extends React.Component<IProps, any> {
                         <Form.Field>
                             <input
                                 type="file"
-                                placeholder="Photo"
-                                onChange={this.handlePhotoChange}
+                                placeholder="Image"
+                                onChange={this.handleImageChange}
                             />
                         </Form.Field>
                         <Form.Field>
                             <Form.TextArea
                                 placeholder="Your text here"
-                                onChange={this.handleContentChange}
+                                onChange={this.handleBodyChange}
                             />
                         </Form.Field>
                     </Form>
@@ -95,12 +95,12 @@ export default class PostForm extends React.Component<IProps, any> {
     }
 
     @action private handleSubmit = () => {
-        if (this.props.form.photo === undefined && this.props.form.content === "") {
+        if (this.props.form.image === undefined && this.props.form.body === "") {
             this.props.form.setError(true)
             return
         }
         this.loading = true
-        this.props.form.post((josn: object, error?: IError) => {
+        this.props.form.post((json: object, error?: IError) => {
             this.loading = false
             if (error === undefined) {
                 this.open = false
@@ -114,11 +114,11 @@ export default class PostForm extends React.Component<IProps, any> {
         this.props.form.setName(event.target.value)
     }
 
-    private handleContentChange = (event: any) => {
-        this.props.form.setContent(event.target.value)
+    private handleBodyChange = (event: any) => {
+        this.props.form.setBody(event.target.value)
     }
 
-    private handlePhotoChange = (event: any) => {
-        this.props.form.setPhoto(event.target.files[0])
+    private handleImageChange = (event: any) => {
+        this.props.form.setImage(event.target.files[0])
     }
 }

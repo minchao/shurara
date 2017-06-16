@@ -7,21 +7,21 @@ type Post struct {
 	Timestamp int64     `json:"timestamp"`
 	Body      string    `json:"body"`
 	Comments  []Comment `json:"comments"`
-	Photos    []Photo   `json:"photos"`
+	Images    []Image   `json:"images"`
 }
 
-type Photo struct {
-	Original   PhotoOriginal     `json:"original"`
-	Thumbnails []*PhotoThumbnail `json:"thumbnails"`
+type Image struct {
+	Original   ImageOriginal     `json:"original"`
+	Thumbnails []*ImageThumbnail `json:"thumbnails"`
 }
 
-type PhotoOriginal struct {
+type ImageOriginal struct {
 	URL    string `json:"url"`
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
 }
 
-type PhotoThumbnail struct {
+type ImageThumbnail struct {
 	URL    string `json:"url"`
 	Width  int    `json:"width"`
 	Height int    `json:"height"`

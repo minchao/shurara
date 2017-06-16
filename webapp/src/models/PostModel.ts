@@ -5,12 +5,12 @@ export interface IUser {
     name: string
 }
 
-export interface IPhoto {
-    original: IPhotoItem
-    thumbnails: IPhotoItem
+export interface IImage {
+    original: IImageItem
+    thumbnails: IImageItem
 }
 
-export interface IPhotoItem {
+export interface IImageItem {
     url: string
     width: number
     height: number
@@ -31,7 +31,7 @@ export default class PostModel {
         post.type = js.type
         post.timestamp = js.timestamp
         post.body = js.body
-        post.photos = js.photos
+        post.images = js.images
         post.comments = js.comments
         return post
     }
@@ -41,6 +41,6 @@ export default class PostModel {
     @observable public type: string
     @observable public timestamp: number
     @observable public body: string
-    @observable public photos?: IPhoto[]
+    @observable public images?: IImage[]
     @observable public comments: IComment[]
 }

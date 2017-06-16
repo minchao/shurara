@@ -21,9 +21,9 @@ export default class Post extends React.Component<IProps, any> {
             <Item>
                 {post.type === "photo" && (
                     <Item.Image
-                        src={post.photos[0].original.url}
+                        src={post.images[0].original.url}
                         size="medium"
-                        onClick={() => this.props.openModal(post.photos[0].original.url)}
+                        onClick={() => this.props.openModal(post.images[0].original.url)}
                     />
                 )}
 
