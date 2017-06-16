@@ -20,8 +20,6 @@ const stores = {
     routing: routingStore,
 }
 
-stores.board.sync("blog")
-
 export default class App extends React.Component<any, any> {
     public render() {
         return (
@@ -32,6 +30,7 @@ export default class App extends React.Component<any, any> {
                             <Nav/>
 
                             <Route exact path="/" component={HomePage}/>
+                            <Route path="/:boardId" component={HomePage}/>
                             <Route path="/help" component={HelpPage}/>
                         </div>
                     </Router>

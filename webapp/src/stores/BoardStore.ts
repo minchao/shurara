@@ -32,9 +32,10 @@ export default class BoardStore {
         this.paging = js.paging
     }
 
-    @action public sync(boardId: string) {
+    @action
+    public fetch(path: string) {
         this.loading = true
-        api.getBoard(boardId, (json: object, error?: IError) => {
+        api.getBoardByPath(path, (json: object, error?: IError) => {
             if (error === undefined) {
                 this.fromJS(json)
             } else {

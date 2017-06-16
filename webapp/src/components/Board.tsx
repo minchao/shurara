@@ -1,4 +1,5 @@
 import {inject, observer} from "mobx-react"
+import {RouterStore} from "mobx-react-router"
 import * as React from "react"
 import {Button, Container, Divider, Item} from "semantic-ui-react"
 
@@ -9,11 +10,12 @@ import Post from "./Post"
 import PostForm from "./PostForm"
 
 interface IProps {
+    routing?: RouterStore
     board: BoardStore
     postForm?: PostFormStore
 }
 
-@inject("postForm")
+@inject("routing", "postForm")
 @observer
 export default class Board extends React.Component<IProps, any> {
 
@@ -41,26 +43,30 @@ export default class Board extends React.Component<IProps, any> {
                             />
                         ))}
                     </Item.Group>
-
-                    <Divider/>
                 </Container>
 
+                {this.props.board.paging &&
                 <Container textAlign="center">
+                    <Divider/>
                     <Button.Group className="paging">
+                        {this.props.board.paging.previous &&
                         <Button
                             icon="left chevron"
                             labelPosition="left"
                             content="Prev"
                             onClick={this.pagingPrevious}
                         />
+                        }
+                        {this.props.board.paging.next &&
                         <Button
                             icon="right chevron"
                             labelPosition="right"
                             content="Next"
                             onClick={this.pagingNext}
                         />
+                        }
                     </Button.Group>
-                </Container>
+                </Container>}
             </main>
         )
     }
@@ -70,10 +76,10 @@ export default class Board extends React.Component<IProps, any> {
     }
 
     private pagingPrevious = () => {
-        // TODO
+        this.props.routing.push(this.props.board.paging.previous)
     }
 
     private pagingNext = () => {
-        // TODO
+        this.props.routing.push(this.props.board.paging.next)
     }
 }

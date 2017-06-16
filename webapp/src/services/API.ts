@@ -25,8 +25,18 @@ class API {
         )
     }
 
-    public getBoard(boardId: string, callback: (json: object, error?: IError) => void) {
-        this.fetch(`/api/boards/${boardId}`, {method: "get"}, callback)
+    public getBoard(boardId: string, query: string, callback: (json: object, error?: IError) => void) {
+        if (!boardId) {
+            boardId = "default"
+        }
+        this.fetch(`/api/boards/${boardId}${query}`, {method: "get"}, callback)
+    }
+
+    public getBoardByPath(path: string, callback: (json: object, error?: IError) => void) {
+        const paths = path.split("?")
+        const board = paths[0].replace("/", "")
+        const query = (paths.length > 1) ? `?${paths[1]}` : ""
+        this.getBoard(board, query, callback)
     }
 
     public postBoardPost(post: any, callback: (json: object, error?: IError) => void) {
