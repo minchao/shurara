@@ -33,9 +33,9 @@ export default class BoardStore {
     }
 
     @action
-    public fetch(path: string) {
+    public fetch(boardId: string, query: string) {
         this.loading = true
-        api.getBoardByPath(path, (json: object, error?: IError) => {
+        api.getBoard(boardId, query, (json: object, error?: IError) => {
             if (error === undefined) {
                 this.fromJS(json)
             } else {

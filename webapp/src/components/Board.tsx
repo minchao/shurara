@@ -11,6 +11,7 @@ import PostForm from "./PostForm"
 
 interface IProps {
     routing?: RouterStore
+    match: {params: {boardId: string}}
     board: BoardStore
     postForm?: PostFormStore
 }
@@ -76,10 +77,17 @@ export default class Board extends React.Component<IProps, any> {
     }
 
     private pagingPrevious = () => {
-        this.props.routing.push(this.props.board.paging.previous)
+        this.props.routing.push(this.getPagingPath(this.props.board.paging.previous))
     }
 
     private pagingNext = () => {
-        this.props.routing.push(this.props.board.paging.next)
+        this.props.routing.push(this.getPagingPath(this.props.board.paging.next))
+    }
+
+    private getPagingPath(apiPath: string): string {
+        const board = this.props.match.params.boardId ? this.props.match.params.boardId : ""
+        const index = apiPath.indexOf("?")
+        const query = (index > -1) ? apiPath.substr(index, apiPath.length) : ""
+        return `/${board}${query}`
     }
 }

@@ -39,13 +39,6 @@ class API {
         this.fetch(`/api/boards/${boardId}${query}`, {method: "get"}, callback)
     }
 
-    public getBoardByPath(path: string, callback: (json: object, error?: IError) => void) {
-        const paths = path.split("?")
-        const board = paths[0].replace("/", "")
-        const query = (paths.length > 1) ? `?${paths[1]}` : ""
-        this.getBoard(board, query, callback)
-    }
-
     public postBoardPost(post: IBoardPostBody, callback: (json: object, error?: IError) => void) {
         const data = new FormData()
         data.append("name", post.name)

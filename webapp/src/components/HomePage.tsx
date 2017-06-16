@@ -10,9 +10,9 @@ import Loading from "./Loading"
 import Oops from "./Oops"
 
 interface IProps {
-    routing?: RouterStore
-    board?: BoardStore
+    routing: RouterStore
     match: {params: {boardId: string}}
+    board: BoardStore
 }
 
 @inject("routing", "board")
@@ -22,16 +22,15 @@ export default class HomePage extends React.Component<IProps, any> {
     private prevLocation: string
 
     public componentDidMount() {
-        const board = (this.props.match.params.boardId) ? this.props.match.params.boardId : ""
-        this.props.board.fetch(board)
         this.prevLocation = this.getCurrentLocation()
+        this.fetchData()
     }
 
     public componentDidUpdate(prevProps) {
         const currentLocation = this.getCurrentLocation()
         if (this.prevLocation !== currentLocation) {
             this.prevLocation = currentLocation
-            this.props.board.fetch(currentLocation)
+            this.fetchData()
         }
     }
 
@@ -59,7 +58,7 @@ export default class HomePage extends React.Component<IProps, any> {
                         </Container>
                     </header>
 
-                    <Board board={board}/>
+                    <Board board={board} match={this.props.match}/>
 
                     <Footer/>
                 </div>
@@ -69,5 +68,9 @@ export default class HomePage extends React.Component<IProps, any> {
 
     private getCurrentLocation(): string {
         return this.props.routing.location.pathname + this.props.routing.location.search
+    }
+
+    private fetchData() {
+        this.props.board.fetch(this.props.match.params.boardId, this.props.routing.location.search)
     }
 }
