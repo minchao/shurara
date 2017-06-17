@@ -81,7 +81,7 @@ export default class Board extends React.Component<IProps, any> {
     }
 
     private onPostFormSubmit = () => {
-        this.props.routing.push(`/${this.getBoardId()}?${Date.now()}`)
+        this.props.routing.push(`${this.getBoardId()}?${Date.now()}`)
     }
 
     private pagingPrevious = () => {
@@ -95,7 +95,7 @@ export default class Board extends React.Component<IProps, any> {
     private getPagingPath(apiPath: string): string {
         const index = apiPath.indexOf("?")
         const query = (index > -1) ? apiPath.substr(index, apiPath.length) : ""
-        return `/${this.getBoardId()}${query}`
+        return `${this.getBoardId()}${query}`
     }
 
     private getBoardId(): string {

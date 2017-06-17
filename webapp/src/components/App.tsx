@@ -3,7 +3,7 @@ import {Provider} from "mobx-react"
 import DevTools from "mobx-react-devtools"
 import {RouterStore, syncHistoryWithStore} from "mobx-react-router"
 import * as React from "react"
-import {Route, Router} from "react-router"
+import {Route, Router, Switch} from "react-router"
 
 import BoardStore from "../stores/BoardStore"
 import PostFormStore from "../stores/PostFormStore"
@@ -28,10 +28,12 @@ export default class App extends React.Component<any, any> {
                     <Router history={history}>
                         <div>
                             <Nav/>
-
-                            <Route exact path="/" component={HomePage}/>
-                            <Route path="/:boardId" component={HomePage}/>
-                            <Route path="/help" component={HelpPage}/>
+                            <Switch>
+                                <Route exact path="/" component={HomePage}/>
+                                <Route path="/help" component={HelpPage}/>
+                                <Route path="/:boardId" component={HomePage}/>
+                                {/*<Route component={(props) => <Oops error="Not found"/>}/>*/}
+                            </Switch>
                         </div>
                     </Router>
                 </Provider>
