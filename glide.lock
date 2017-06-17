@@ -1,10 +1,16 @@
-hash: 91baade9896657f5fe55ece1295e324170d73d82e57fb9e5dc60042dd2fe0195
-updated: 2017-06-15T00:25:31.324221694+08:00
+hash: 6746db71cc0d7a35e180212a3aa8123045043d7ea5cb03fbbc8428cfa155f5fd
+updated: 2017-06-17T22:19:28.076722574+08:00
 imports:
 - name: github.com/fsnotify/fsnotify
   version: fd9ec7deca8bf46ecd2a795baaacf2b3a9be1197
 - name: github.com/go-playground/form
   version: d18f24949d2fcf4b367cff1424a9e1a60dd5507f
+- name: github.com/go-playground/locales
+  version: 273913d3b2ff7127452603d55dd3f6f888e4f268
+  subpackages:
+  - currency
+- name: github.com/go-playground/universal-translator
+  version: 8bf00f2bdf7faea5c3583d41f57bf1eb15b743d7
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
@@ -34,6 +40,8 @@ imports:
   version: a62a804a8a009876ca59105f7899938a1349f4b3
 - name: github.com/rs/xhandler
   version: ed27b6fd65218132ee50cd95f38474a3d8a2cd12
+- name: github.com/satori/go.uuid
+  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/Sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: github.com/spf13/afero
@@ -65,6 +73,8 @@ imports:
   subpackages:
   - transform
   - unicode/norm
+- name: gopkg.in/go-playground/validator.v9
+  version: 6d8c18553ea1ac493d049edd6f102f52e618f085
 - name: gopkg.in/yaml.v2
   version: a5b47d31c556af34a302ce5d659e6fea44d90de0
 testImports: []

@@ -1,21 +1,36 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
+	"github.com/minchao/shurara/store"
 	config "github.com/spf13/viper"
 	"github.com/urfave/negroni"
 )
 
 type Server struct {
+	Store  store.Store
 	Router *mux.Router
 }
 
 // New creates shurara server.
 func New() *Server {
+	storeName := config.GetString("store.name")
+	fn, ok := store.Factories[storeName]
+	if !ok {
+		log.Fatalf("store factory '%s' not found", storeName)
+	}
+	s, err := fn(config.Sub(fmt.Sprintf("store.%s", storeName)))
+	if err != nil {
+		log.Fatalf("store init failure:", err)
+	}
+	log.Debugf("Store: %s", storeName)
+
 	return &Server{
+		Store:  s,
 		Router: mux.NewRouter().StrictSlash(true),
 	}
 }

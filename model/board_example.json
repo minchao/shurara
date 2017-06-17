@@ -1,7 +1,7 @@
 {
   "board": {
-    "name": "Blog",
-    "slug": "blog",
+    "name": "Default",
+    "slug": "default",
     "summary": "Summary ...",
     "timestamp": 1497082642000
   },

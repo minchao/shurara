@@ -4,6 +4,8 @@ import:
 - package: github.com/go-playground/form
 - package: github.com/gorilla/mux
 - package: github.com/rs/cors
+- package: github.com/satori/go.uuid
 - package: github.com/spf13/cobra
 - package: github.com/spf13/viper
 - package: github.com/urfave/negroni
+- package: gopkg.in/go-playground/validator.v9

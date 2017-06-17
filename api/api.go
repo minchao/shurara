@@ -26,8 +26,8 @@ func Init(app *app.Server) {
 func (s *Server) init() {
 	router := mux.NewRouter().PathPrefix("/api").Subrouter().StrictSlash(true)
 	router.HandleFunc("/", ok).Methods("GET")
-	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}", s.getBoard).Methods("GET")
-	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}/posts", s.postBoardPost).Methods("POST")
+	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}", s.getPostList).Methods("GET")
+	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}/posts", s.postPost).Methods("POST")
 
 	n := negroni.New()
 

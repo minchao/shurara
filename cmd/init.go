@@ -14,6 +14,7 @@ func initEnv(cmd *cobra.Command) error {
 
 	// Set up default configs
 	config.SetDefault("http.addr", ":8080")
+	config.SetDefault("store.name", "memory")
 
 	if len(configFile) > 0 {
 		config.SetConfigFile(configFile)
