@@ -10,6 +10,7 @@ import PostFormStore from "../stores/PostFormStore"
 interface IProps {
     board: BoardStore
     form: PostFormStore
+    onSubmit?: () => void
 }
 
 @observer
@@ -104,6 +105,9 @@ export default class PostForm extends React.Component<IProps, any> {
             this.loading = false
             if (error === undefined) {
                 this.open = false
+                if (this.props.onSubmit) {
+                    this.props.onSubmit()
+                }
             } else {
                 this.props.form.setError(true)
             }

@@ -26,7 +26,11 @@ export default class Board extends React.Component<IProps, any> {
         return (
             <main>
                 <Container textAlign="right">
-                    <PostForm board={this.props.board} form={this.props.postForm}/>
+                    <PostForm
+                        board={this.props.board}
+                        form={this.props.postForm}
+                        onSubmit={this.onPostFormSubmit}
+                    />
                     <Divider/>
                 </Container>
 
@@ -76,6 +80,10 @@ export default class Board extends React.Component<IProps, any> {
         this.handleOpenModalCb(image)
     }
 
+    private onPostFormSubmit = () => {
+        this.props.routing.push(`/${this.getBoardId()}?${Date.now()}`)
+    }
+
     private pagingPrevious = () => {
         this.props.routing.push(this.getPagingPath(this.props.board.paging.previous))
     }
@@ -85,9 +93,12 @@ export default class Board extends React.Component<IProps, any> {
     }
 
     private getPagingPath(apiPath: string): string {
-        const board = this.props.match.params.boardId ? this.props.match.params.boardId : ""
         const index = apiPath.indexOf("?")
         const query = (index > -1) ? apiPath.substr(index, apiPath.length) : ""
-        return `/${board}${query}`
+        return `/${this.getBoardId()}${query}`
+    }
+
+    private getBoardId(): string {
+        return this.props.match.params.boardId ? this.props.match.params.boardId : ""
     }
 }
