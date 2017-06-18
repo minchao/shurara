@@ -6,14 +6,16 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
+	"github.com/minchao/shurara/storage"
 	"github.com/minchao/shurara/store"
 	config "github.com/spf13/viper"
 	"github.com/urfave/negroni"
 )
 
 type Server struct {
-	Store  store.Store
-	Router *mux.Router
+	Store   store.Store
+	Storage storage.Storage
+	Router  *mux.Router
 }
 
 // New creates shurara server.
@@ -35,8 +37,19 @@ func (s *Server) Run() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	storageName := config.GetString("storage.name")
+	s.Storage, err = storage.New(storageName, config.Sub(fmt.Sprintf("storage.%s", storageName)))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Serving static files
+	if config.GetString("storage.name") == "local" {
+		s.Router.PathPrefix("/images/").Handler(http.StripPrefix(
+			"/images/",
+			http.FileServer(http.Dir(config.GetString("storage.local.baseDir")))))
+	}
+
 	dir := http.Dir(dist)
 	f, err := dir.Open("index.html")
 	if err != nil {
