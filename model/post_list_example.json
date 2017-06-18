@@ -7,25 +7,31 @@
   },
   "posts": [
     {
-      "id": "003",
+      "id": "001",
       "user": {
         "id": "6BHMeMhk",
         "name": "John"
       },
-      "type": "text",
-      "timestamp": 1497083642000,
+      "type": "image",
+      "timestamp": 1497083002000,
       "body": "O brave new world, O brave new world that has such people in it. Let's start at once.",
-      "comments": [
+      "images": [
         {
-          "type": "text",
-          "timestamp": 1497083650000,
-          "user": {
-            "id": "YgoxCMQQNo",
-            "name": "Bernard"
+          "original": {
+            "url": "https://upload.wikimedia.org/wikipedia/en/1/18/BraveNewWorldRevisited.JPG",
+            "width": 640,
+            "height": 360
           },
-          "body": "You have a most peculiar way of talking sometimes,\nAnd, anyhow, hadn't you better wait till you actually see the new world?"
+          "thumbnails": [
+            {
+              "url": "https://upload.wikimedia.org/wikipedia/en/1/18/BraveNewWorldRevisited.JPG",
+              "width": 640,
+              "height": 360
+            }
+          ]
         }
-      ]
+      ],
+      "comments": []
     },
     {
       "id": "002",
@@ -33,7 +39,7 @@
         "id": "6BHMeMhk",
         "name": "John"
       },
-      "type": "photo",
+      "type": "image",
       "timestamp": 1497083622000,
       "body": "",
       "images": [
@@ -106,35 +112,25 @@
       ]
     },
     {
-      "id": "001",
+      "id": "003",
       "user": {
         "id": "6BHMeMhk",
         "name": "John"
       },
-      "type": "photo",
-      "timestamp": 1497083002000,
+      "type": "text",
+      "timestamp": 1497083642000,
       "body": "O brave new world, O brave new world that has such people in it. Let's start at once.",
-      "images": [
+      "comments": [
         {
-          "original": {
-            "url": "https://upload.wikimedia.org/wikipedia/en/1/18/BraveNewWorldRevisited.JPG",
-            "width": 640,
-            "height": 360
+          "type": "text",
+          "timestamp": 1497083650000,
+          "user": {
+            "id": "YgoxCMQQNo",
+            "name": "Bernard"
           },
-          "thumbnails": [
-            {
-              "url": "https://upload.wikimedia.org/wikipedia/en/1/18/BraveNewWorldRevisited.JPG",
-              "width": 640,
-              "height": 360
-            }
-          ]
+          "body": "You have a most peculiar way of talking sometimes,\nAnd, anyhow, hadn't you better wait till you actually see the new world?"
         }
-      ],
-      "comments": []
+      ]
     }
-  ],
-  "paging": {
-    "previous": "",
-    "next": "?limit=2&until=1492182124131181"
-  }
+  ]
 }
