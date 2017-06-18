@@ -19,7 +19,7 @@ export default class Post extends React.Component<IProps, any> {
 
         return (
             <Item>
-                {post.type === "photo" && (
+                {post.type === "image" && (
                     <Item.Image
                         src={post.images[0].original.url}
                         size="medium"
