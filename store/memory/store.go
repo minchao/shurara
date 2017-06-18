@@ -2,18 +2,19 @@ package memory
 
 import (
 	"sync"
+	"time"
 
 	"github.com/minchao/shurara/model"
 	"github.com/minchao/shurara/store"
 	"github.com/spf13/viper"
-	"time"
 )
 
 func init() {
 	store.Register("memory", Plugin)
 }
 
-func Plugin(config *viper.Viper) (store.Store, error) {
+// Plugin returns memory store.
+func Plugin(_ *viper.Viper) (store.Store, error) {
 	return New(), nil
 }
 
@@ -25,6 +26,7 @@ type Store struct {
 	sync.Mutex
 }
 
+// New creates store.
 func New() store.Store {
 	s := &Store{}
 	s.board = NewBoardStore(s)

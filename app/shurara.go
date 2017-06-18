@@ -18,28 +18,23 @@ type Server struct {
 
 // New creates shurara server.
 func New() *Server {
-	storeName := config.GetString("store.name")
-	fn, ok := store.Factories[storeName]
-	if !ok {
-		log.Fatalf("store factory '%s' not found", storeName)
-	}
-	s, err := fn(config.Sub(fmt.Sprintf("store.%s", storeName)))
-	if err != nil {
-		log.Fatalf("store init failure:", err)
-	}
-	log.Debugf("Store: %s", storeName)
-
 	return &Server{
-		Store:  s,
 		Router: mux.NewRouter().StrictSlash(true),
 	}
 }
 
 func (s *Server) Run() {
 	var (
+		err  error
 		addr = config.GetString("http.addr")
 		dist = "./webapp/dist"
 	)
+
+	storeName := config.GetString("store.name")
+	s.Store, err = store.New(storeName, config.Sub(fmt.Sprintf("store.%s", storeName)))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Serving static files
 	dir := http.Dir(dist)
