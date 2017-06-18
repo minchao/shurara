@@ -2,6 +2,11 @@ package model
 
 import "time"
 
+const (
+	PostTypeText  = "text"
+	PostTypeImage = "image"
+)
+
 type Post struct {
 	Id        string     `json:"id"`
 	User      User       `json:"user"`
@@ -12,10 +17,10 @@ type Post struct {
 	Images    []*Image   `json:"images"`
 }
 
-func NewPost(user User, t, body string) *Post {
+func NewPost(user User, body string) *Post {
 	return &Post{
 		User:      user,
-		Type:      t,
+		Type:      PostTypeText,
 		Timestamp: time.Now().UnixNano() / int64(time.Millisecond),
 		Body:      body,
 		Comments:  []*Comment{},
@@ -23,9 +28,31 @@ func NewPost(user User, t, body string) *Post {
 	}
 }
 
+func (p *Post) AddComment(comment *Comment) *Post {
+	p.Comments = append(p.Comments, comment)
+	return p
+}
+
+func (p *Post) AddImage(image *Image) *Post {
+	p.Images = append(p.Images, image)
+	return p
+}
+
 type Image struct {
 	Original   ImageOriginal     `json:"original"`
 	Thumbnails []*ImageThumbnail `json:"thumbnails"`
+}
+
+func NewImage(original ImageOriginal) *Image {
+	return &Image{
+		Original:   original,
+		Thumbnails: []*ImageThumbnail{},
+	}
+}
+
+func (i *Image) AddThumbnail(thumbnail *ImageThumbnail) *Image {
+	i.Thumbnails = append(i.Thumbnails, thumbnail)
+	return i
 }
 
 type ImageOriginal struct {
