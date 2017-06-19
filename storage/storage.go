@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/minchao/shurara/model"
 	config "github.com/spf13/viper"
 )
 
@@ -38,7 +39,7 @@ func New(name string, cfg *config.Viper) (Storage, error) {
 
 type Result struct {
 	Data interface{}
-	Err  error
+	Err  *model.AppError
 }
 
 type Channel chan Result

@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/minchao/shurara/model"
 	"github.com/minchao/shurara/storage"
 	config "github.com/spf13/viper"
 )
@@ -57,7 +58,7 @@ func (s *Storage) Put(path string, data []byte) storage.Channel {
 			err = ioutil.WriteFile(fullPath, data, 0644)
 		}
 		if err != nil {
-			result.Err = err
+			result.Err = model.NewAppError("storage.local.put.error", err.Error())
 		}
 
 		channel <- result
