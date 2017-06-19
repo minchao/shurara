@@ -2,45 +2,30 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 	"reflect"
 	"strings"
 
+	"github.com/minchao/shurara/model"
 	"gopkg.in/go-playground/validator.v9"
 )
 
-type errorMessage struct {
-	Error            string      `json:"error"`
-	ErrorDescription interface{} `json:"error_description,omitempty"`
-}
-
-func formErrorMessage(err error) errorMessage {
-	var (
-		e           string = "bad_request"
-		description interface{}
-	)
-	switch err.(type) {
-	case validator.ValidationErrors:
-		errors := map[string]interface{}{}
-		for _, v := range err.(validator.ValidationErrors) {
-			errors[v.Field()] = fmt.Sprintf("Invalid validation on tag: %s", v.Tag())
-		}
-		description = errors
-	default:
-		description = err.Error()
-	}
-	return errorMessage{Error: e, ErrorDescription: description}
-}
-
-func render(w http.ResponseWriter, code int, data interface{}) error {
+func render(w http.ResponseWriter, statusCode int, data interface{}) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(code)
+	w.WriteHeader(statusCode)
 	if data == nil {
 		return nil
 	}
 	return json.NewEncoder(w).Encode(data)
+}
+
+func renderAppError(w http.ResponseWriter, err *model.AppError) error {
+	return render(w, err.StatusCode, err)
+}
+
+func renderError(w http.ResponseWriter, statusCode int, description string) error {
+	return renderAppError(w, model.NewAppErrorBy(statusCode, description))
 }
 
 func ok(w http.ResponseWriter, _ *http.Request) {

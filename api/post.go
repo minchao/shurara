@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -14,9 +13,9 @@ import (
 )
 
 type postListReq struct {
+	Limit int   `json:"limit" form:"limit" validate:"omitempty,gt=0"`
 	Since int64 `json:"since" form:"since" validate:"omitempty"`
 	Until int64 `json:"until" form:"until" validate:"omitempty"`
-	Limit int   `json:"limit" form:"limit" validate:"omitempty,gt=0"`
 }
 
 func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
@@ -27,12 +26,12 @@ func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err := form.NewDecoder().Decode(&req, r.URL.Query()); err != nil {
-		render(w, http.StatusBadRequest, errorMessage{Error: "bad_request", ErrorDescription: err.Error()})
+		renderError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	validate := NewValidate()
 	if err := validate.Struct(req); err != nil {
-		render(w, http.StatusBadRequest, formErrorMessage(err))
+		renderError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -43,12 +42,12 @@ func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
 
 	boardResult := <-s.app.Store.Board().Get(boardId)
 	if boardResult.Err != nil {
-		render(w, http.StatusBadRequest, errorMessage{Error: "not_found"})
+		renderAppError(w, model.NewAppErrorBy(http.StatusNotFound, "Board not found"))
 		return
 	}
 	postsResult := <-s.app.Store.Post().Search(boardId, req.Limit, req.Since, req.Until)
 	if postsResult.Err != nil {
-		render(w, http.StatusInternalServerError, errorMessage{Error: "Internal_server_error"})
+		renderError(w, http.StatusInternalServerError, "")
 		return
 	}
 
@@ -95,49 +94,43 @@ type postReq struct {
 
 func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 	var (
-		vars    = mux.Vars(r)
-		boardId string
-		post    postReq
-		file    multipart.File
-		//header *multipart.FileHeader
+		vars     = mux.Vars(r)
+		boardId  string
+		req      postReq
+		post     *model.Post
+		hasImage bool
 	)
 
 	boardId, _ = vars["board_id"]
 	r.ParseMultipartForm(32 << 20)
-	decoder.Decode(&post, r.Form)
+	decoder.Decode(&req, r.Form)
 
-	_, hasImage := r.MultipartForm.File["image"]
-	if len(post.Body) == 0 && !hasImage {
-		render(w, http.StatusBadRequest, errorMessage{Error: "bad_request"})
+	if r.MultipartForm != nil && r.MultipartForm.File != nil {
+		_, hasImage = r.MultipartForm.File["image"]
+	}
+	if len(req.Body) == 0 && !hasImage {
+		renderError(w, http.StatusBadRequest, "Either body or image is required")
 		return
 	}
+
+	post = model.NewPost(model.User{Id: "tester", Name: req.Name}, req.Body)
+
 	if hasImage {
-		var err error
-		file, _, err = r.FormFile("image")
+		post.Type = model.PostTypeImage
+
+		file, _, err := r.FormFile("image")
 		if err != nil {
-			render(w, http.StatusBadRequest, errorMessage{Error: "bad_request"})
+			renderError(w, http.StatusBadRequest, "Image parsing error")
 			return
 		}
 		defer file.Close()
 	}
 
-	log.Debugf("boardId: %s, name: %s, content: %s",
-		boardId,
-		post.Name,
-		post.Body)
-
-	result := <-s.app.Store.Post().Save(
-		boardId,
-		model.NewPost(
-			model.User{Id: "tester", Name: "Tester"},
-			"text",
-			post.Body,
-		),
-	)
+	result := <-s.app.Store.Post().Save(boardId, post)
 	if result.Err != nil {
 		log.Errorln(result.Err)
 
-		render(w, http.StatusInternalServerError, errorMessage{Error: "Internal_server_error"})
+		renderError(w, http.StatusInternalServerError, "")
 		return
 	}
 
