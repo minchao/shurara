@@ -1,14 +1,15 @@
 package api
 
 import (
-	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
+	"path/filepath"
 
 	"github.com/go-playground/form"
 	"github.com/gorilla/mux"
 	"github.com/minchao/shurara/model"
+	"github.com/satori/go.uuid"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -24,9 +25,8 @@ func (req *postListReq) isValid() error {
 
 func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
 	var (
-		vars     = mux.Vars(r)
-		req      postListReq
-		postList model.PostList
+		vars = mux.Vars(r)
+		req  postListReq
 	)
 
 	if err := form.NewDecoder().Decode(&req, r.URL.Query()); err != nil {
@@ -41,52 +41,10 @@ func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	boardId, _ := vars["board_id"]
-	if req.Limit == 0 {
-		req.Limit = 20
-	}
 
-	boardResult := <-s.app.Store.Board().Get(boardId)
-	if boardResult.Err != nil {
-		renderAppError(w, boardResult.Err.SetStatusCode(http.StatusNotFound))
-		return
-	}
-	postsResult := <-s.app.Store.Post().Search(boardId, req.Limit, req.Since, req.Until)
-	if postsResult.Err != nil {
-		renderAppError(w, postsResult.Err.SetStatusCode(http.StatusInternalServerError))
-		return
-	}
-
-	postList = model.PostList{
-		Board:  *boardResult.Data.(*model.Board),
-		Posts:  postsResult.Data.([]*model.Post),
-		Paging: model.Paging{},
-	}
-
-	if len(postList.Posts) > 0 {
-		// Paging
-		since := postList.Posts[0].Timestamp
-		until := postList.Posts[len(postList.Posts)-1].Timestamp
-
-		u, _ := url.Parse(fmt.Sprintf("/api/boards/%s", boardId))
-		values, _ := form.NewEncoder().Encode(&req)
-		cleanEmptyURLValues(&values)
-
-		prevCh := s.app.Store.Post().Search(boardId, req.Limit, since, 0)
-		nextCh := s.app.Store.Post().Search(boardId, req.Limit, 0, until)
-		if postsResult := <-prevCh; postsResult.Err == nil && len(postsResult.Data.([]*model.Post)) > 0 {
-			values.Del("until")
-			values.Set("since", strconv.FormatInt(since, 10))
-			u.RawQuery = values.Encode()
-
-			postList.Paging.Previous = u.String()
-		}
-		if postsResult := <-nextCh; postsResult.Err == nil && len(postsResult.Data.([]*model.Post)) > 0 {
-			values.Del("since")
-			values.Set("until", strconv.FormatInt(until, 10))
-			u.RawQuery = values.Encode()
-
-			postList.Paging.Next = u.String()
-		}
+	postList, err := s.app.GetPostList(boardId, req.Limit, req.Since, req.Until)
+	if err != nil {
+		renderAppError(w, err)
 	}
 
 	render(w, http.StatusOK, postList)
@@ -124,13 +82,32 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 	if hasImage {
 		post.Type = model.PostTypeImage
 
-		file, _, err := r.FormFile("image")
+		file, header, err := r.FormFile("image")
 		if err != nil {
 			renderAppError(w, model.NewAppError("api.post.post.bad_request", "Image parsing error").
 				SetStatusCode(http.StatusBadRequest))
 			return
 		}
 		defer file.Close()
+
+		filename := uuid.NewV4().String() + filepath.Ext(header.Filename)
+		data, _ := ioutil.ReadAll(file)
+
+		if result := <-s.app.Storage.Put(filename, data); result.Err != nil {
+			renderAppError(w, result.Err.SetStatusCode(http.StatusInternalServerError))
+			return
+		}
+
+		base, _ := url.Parse(s.app.Storage.GetBaseURL())
+		f, _ := url.Parse(filename)
+
+		image := model.NewImage(model.ImageOriginal{
+			URL:    base.ResolveReference(f).String(),
+			Width:  0,
+			Height: 0,
+		})
+
+		post.AddImage(image)
 	}
 
 	result := <-s.app.Store.Post().Save(boardId, post)
