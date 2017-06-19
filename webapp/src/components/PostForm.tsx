@@ -53,6 +53,7 @@ export default class PostForm extends React.Component<IProps, any> {
                         <Form.Field>
                             <input
                                 type="file"
+                                accept="image/*"
                                 placeholder="Image"
                                 onChange={this.handleImageChange}
                             />
