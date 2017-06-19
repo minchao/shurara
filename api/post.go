@@ -6,16 +6,20 @@ import (
 	"net/url"
 	"strconv"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/go-playground/form"
 	"github.com/gorilla/mux"
 	"github.com/minchao/shurara/model"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 type postListReq struct {
 	Limit int   `json:"limit" form:"limit" validate:"omitempty,gt=0"`
 	Since int64 `json:"since" form:"since" validate:"omitempty"`
 	Until int64 `json:"until" form:"until" validate:"omitempty"`
+}
+
+func (req *postListReq) isValid() error {
+	return validator.New().Struct(req)
 }
 
 func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
@@ -26,12 +30,13 @@ func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err := form.NewDecoder().Decode(&req, r.URL.Query()); err != nil {
-		renderError(w, http.StatusBadRequest, err.Error())
+		renderAppError(w, model.NewAppError("api.post.list.bad_request", err.Error()).
+			SetStatusCode(http.StatusBadRequest))
 		return
 	}
-	validate := NewValidate()
-	if err := validate.Struct(req); err != nil {
-		renderError(w, http.StatusBadRequest, err.Error())
+	if err := req.isValid(); err != nil {
+		renderAppError(w, model.NewAppError("api.post.list.bad_request", err.Error()).
+			SetStatusCode(http.StatusBadRequest))
 		return
 	}
 
@@ -42,12 +47,12 @@ func (s *Server) getPostList(w http.ResponseWriter, r *http.Request) {
 
 	boardResult := <-s.app.Store.Board().Get(boardId)
 	if boardResult.Err != nil {
-		renderAppError(w, model.NewAppErrorBy(http.StatusNotFound, "Board not found"))
+		renderAppError(w, boardResult.Err.SetStatusCode(http.StatusNotFound))
 		return
 	}
 	postsResult := <-s.app.Store.Post().Search(boardId, req.Limit, req.Since, req.Until)
 	if postsResult.Err != nil {
-		renderError(w, http.StatusInternalServerError, "")
+		renderAppError(w, postsResult.Err.SetStatusCode(http.StatusInternalServerError))
 		return
 	}
 
@@ -103,13 +108,14 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 
 	boardId, _ = vars["board_id"]
 	r.ParseMultipartForm(32 << 20)
-	decoder.Decode(&req, r.Form)
+	form.NewDecoder().Decode(&req, r.Form)
 
 	if r.MultipartForm != nil && r.MultipartForm.File != nil {
 		_, hasImage = r.MultipartForm.File["image"]
 	}
 	if len(req.Body) == 0 && !hasImage {
-		renderError(w, http.StatusBadRequest, "Either body or image is required")
+		renderAppError(w, model.NewAppError("api.post.post.bad_request", "Either body or image is required").
+			SetStatusCode(http.StatusBadRequest))
 		return
 	}
 
@@ -120,7 +126,8 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 
 		file, _, err := r.FormFile("image")
 		if err != nil {
-			renderError(w, http.StatusBadRequest, "Image parsing error")
+			renderAppError(w, model.NewAppError("api.post.post.bad_request", "Image parsing error").
+				SetStatusCode(http.StatusBadRequest))
 			return
 		}
 		defer file.Close()
@@ -128,9 +135,7 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 
 	result := <-s.app.Store.Post().Save(boardId, post)
 	if result.Err != nil {
-		log.Errorln(result.Err)
-
-		renderError(w, http.StatusInternalServerError, "")
+		renderAppError(w, result.Err.SetStatusCode(http.StatusInternalServerError))
 		return
 	}
 

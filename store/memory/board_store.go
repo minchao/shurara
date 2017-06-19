@@ -1,8 +1,6 @@
 package memory
 
 import (
-	"errors"
-
 	"github.com/minchao/shurara/model"
 	"github.com/minchao/shurara/store"
 )
@@ -23,7 +21,7 @@ func (s *BoardStore) Get(id string) store.Channel {
 
 		boardWrap := s.store.get(id)
 		if boardWrap == nil {
-			result.Err = errors.New("board not found")
+			result.Err = model.NewAppError("store.board.get.error", "Board not found")
 		} else {
 			result.Data = &boardWrap.board.board
 		}

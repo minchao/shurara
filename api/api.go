@@ -2,15 +2,12 @@ package api
 
 import (
 	log "github.com/Sirupsen/logrus"
-	"github.com/go-playground/form"
 	"github.com/gorilla/mux"
 	"github.com/minchao/shurara/app"
 	"github.com/rs/cors"
 	config "github.com/spf13/viper"
 	"github.com/urfave/negroni"
 )
-
-var decoder = form.NewDecoder()
 
 type Server struct {
 	app *app.Server

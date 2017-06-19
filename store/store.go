@@ -39,7 +39,7 @@ func New(name string, cfg *config.Viper) (Store, error) {
 
 type Result struct {
 	Data interface{}
-	Err  error
+	Err  *model.AppError
 }
 
 type Channel chan Result

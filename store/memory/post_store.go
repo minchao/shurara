@@ -1,7 +1,6 @@
 package memory
 
 import (
-	"errors"
 	"time"
 
 	"github.com/minchao/shurara/model"
@@ -33,7 +32,7 @@ func (s *PostStore) Save(boardId string, post *model.Post) store.Channel {
 
 		boardWrap := s.store.get(boardId)
 		if boardWrap == nil {
-			result.Err = errors.New("board not found")
+			result.Err = model.NewAppError("store.post.save.error", "Board not found")
 		} else {
 			boardWrap.Lock()
 			defer boardWrap.Unlock()
@@ -59,7 +58,7 @@ func (s *PostStore) Search(boardId string, limit int, since, until int64) store.
 
 		boardWrap := s.store.get(boardId)
 		if boardWrap == nil {
-			result.Err = errors.New("board not found")
+			result.Err = model.NewAppError("store.post.search.error", "Board not found")
 		} else {
 			boardWrap.RLock()
 			defer boardWrap.RUnlock()
