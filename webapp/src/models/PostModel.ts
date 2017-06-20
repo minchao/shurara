@@ -7,7 +7,7 @@ export interface IUser {
 
 export interface IImage {
     original: IImageItem
-    thumbnails: IImageItem
+    thumbnails: IImageItem[]
 }
 
 export interface IImageItem {
@@ -24,7 +24,7 @@ export interface IComment {
 }
 
 export default class PostModel {
-    public static fromJS(js): PostModel {
+    public static fromJS(js: any): PostModel {
         const post = new PostModel()
         post.id = js.id
         post.user = js.user

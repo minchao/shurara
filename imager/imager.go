@@ -88,7 +88,7 @@ func (i *Imager) CreateImage(data []byte) (*model.Image, *model.AppError) {
 
 	resultCh := i.storage.Put(filename, data)
 
-	if thumbnails, _ := i.CreateThumbnails(img, format, filename); thumbnails != nil && len(thumbnails) > 0 {
+	if thumbnails, _ := i.CreateThumbnails(img, format, thumbnailSizes, filename); thumbnails != nil {
 		imageModel.Thumbnails = thumbnails
 	}
 
@@ -99,15 +99,20 @@ func (i *Imager) CreateImage(data []byte) (*model.Image, *model.AppError) {
 	return imageModel, nil
 }
 
-func (i *Imager) CreateThumbnails(img image.Image, format string, filePath string) ([]*model.ImageThumbnail, *model.AppError) {
+func (i *Imager) CreateThumbnails(
+	img image.Image,
+	format string,
+	sizes []int,
+	filePath string,
+) ([]*model.ImageThumbnail, *model.AppError) {
 	var (
-		channel    = make(chan result, len(thumbnailSizes))
+		channel    = make(chan result, len(sizes))
 		wait       = sync.WaitGroup{}
 		thumbnails = []*model.ImageThumbnail{}
 		imgWidth   = img.Bounds().Dx()
 	)
 
-	for _, size := range thumbnailSizes {
+	for _, size := range sizes {
 		if imgWidth >= size {
 			wait.Add(1)
 
@@ -115,7 +120,7 @@ func (i *Imager) CreateThumbnails(img image.Image, format string, filePath strin
 
 			go func(size int) {
 				path := genThumbnailFilePath(filePath, "_"+strconv.Itoa(size), "."+format)
-				w, h, err := i.process(imaging.Fit, img, format, size, size, path)
+				w, h, err := i.process(imaging.Resize, img, format, size, 0, path)
 
 				r := result{err: err}
 

@@ -3,7 +3,7 @@ import * as moment from "moment"
 import * as React from "react"
 import {Comment, Item} from "semantic-ui-react"
 
-import PostModel from "../models/PostModel"
+import PostModel, {IImage} from "../models/PostModel"
 import PostComment from "./PostComment"
 import PostReply from "./PostReply"
 
@@ -16,14 +16,23 @@ interface IProps {
 export default class Post extends React.Component<IProps, any> {
     public render() {
         const post = this.props.post
+        const getThumbnail = (image: IImage, size: number): string => {
+            if (image.thumbnails.length > 0) {
+                const thumbnail = image.thumbnails.find((thumbnail) => thumbnail.width === size)
+                if (thumbnail) {
+                    return thumbnail.url
+                }
+            }
+            return image.original.url
+        }
 
         return (
             <Item>
                 {post.type === "image" && (
                     <Item.Image
-                        src={post.images[0].original.url}
+                        src={getThumbnail(post.images[0], 300)}
                         size="medium"
-                        onClick={() => this.props.openModal(post.images[0].original.url)}
+                        onClick={() => this.props.openModal(getThumbnail(post.images[0], 1024))}
                     />
                 )}
 
