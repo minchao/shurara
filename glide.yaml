@@ -1,9 +1,11 @@
 package: github.com/minchao/shurara
 import:
 - package: github.com/Sirupsen/logrus
+- package: github.com/disintegration/imaging
 - package: github.com/go-playground/form
 - package: github.com/gorilla/mux
 - package: github.com/rs/cors
+- package: github.com/rs/xid
 - package: github.com/satori/go.uuid
 - package: github.com/spf13/cobra
 - package: github.com/spf13/viper

@@ -3,13 +3,12 @@ package api
 import (
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"path/filepath"
 
 	"github.com/go-playground/form"
 	"github.com/gorilla/mux"
 	"github.com/minchao/shurara/model"
-	"github.com/satori/go.uuid"
+	"github.com/rs/xid"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -62,6 +61,8 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 		req      postReq
 		post     *model.Post
 		hasImage bool
+		filename string
+		data     []byte
 	)
 
 	boardId, _ = vars["board_id"]
@@ -90,31 +91,15 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 
-		filename := uuid.NewV4().String() + filepath.Ext(header.Filename)
-		data, _ := ioutil.ReadAll(file)
-
-		if result := <-s.app.Storage.Put(filename, data); result.Err != nil {
-			renderAppError(w, result.Err.SetStatusCode(http.StatusInternalServerError))
-			return
-		}
-
-		base, _ := url.Parse(s.app.Storage.GetBaseURL())
-		f, _ := url.Parse(filename)
-
-		image := model.NewImage(model.ImageOriginal{
-			URL:    base.ResolveReference(f).String(),
-			Width:  0,
-			Height: 0,
-		})
-
-		post.AddImage(image)
+		filename = xid.New().String() + filepath.Ext(header.Filename)
+		data, _ = ioutil.ReadAll(file)
 	}
 
-	result := <-s.app.Store.Post().Save(boardId, post)
-	if result.Err != nil {
-		renderAppError(w, result.Err.SetStatusCode(http.StatusInternalServerError))
+	result, err := s.app.CreatePost(boardId, post, filename, data)
+	if err != nil {
+		renderAppError(w, err.SetStatusCode(http.StatusInternalServerError))
 		return
 	}
 
-	render(w, http.StatusOK, result.Data.(*model.Post))
+	render(w, http.StatusOK, result)
 }
