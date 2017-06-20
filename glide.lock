@@ -1,5 +1,5 @@
-hash: ae849b264285f008c060a236e3036922760f4e127742399c79bdc6529c4276f2
-updated: 2017-06-20T18:21:38.809309474+08:00
+hash: 131e1c142cc79806bba664f62c9fda2208b8514020b675a48d9cb5446fe4456d
+updated: 2017-06-20T18:24:43.179144362+08:00
 imports:
 - name: github.com/disintegration/imaging
   version: ac27d1805a555e1754fa177216ee07f4e63c30b5
@@ -44,8 +44,6 @@ imports:
   version: ed27b6fd65218132ee50cd95f38474a3d8a2cd12
 - name: github.com/rs/xid
   version: 057f3c928c207d1e7e318929eeac93bb46e319e3
-- name: github.com/satori/go.uuid
-  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/Sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: github.com/spf13/afero

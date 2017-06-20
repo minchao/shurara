@@ -5,7 +5,7 @@ import (
 
 	"github.com/minchao/shurara/model"
 	"github.com/minchao/shurara/store"
-	"github.com/satori/go.uuid"
+	"github.com/rs/xid"
 )
 
 type PostStore struct {
@@ -37,7 +37,7 @@ func (s *PostStore) Save(boardId string, post *model.Post) store.Channel {
 			boardWrap.Lock()
 			defer boardWrap.Unlock()
 
-			post.Id = uuid.NewV4().String()
+			post.Id = xid.New().String()
 
 			boardWrap.board.posts = append(boardWrap.board.posts, post)
 			result.Data = boardWrap.board.posts[len(boardWrap.board.posts)-1]
