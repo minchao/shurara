@@ -1,7 +1,6 @@
 package app
 
 import (
-	"bytes"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -59,33 +58,13 @@ func (s *Server) GetPostList(boardId string, limit int, since, until int64) (*mo
 	return postList, nil
 }
 
-func (s *Server) CreatePost(boardId string, post *model.Post, filename string, data []byte) (*model.Post, *model.AppError) {
+func (s *Server) CreatePost(boardId string, post *model.Post, data []byte) (*model.Post, *model.AppError) {
 
-	if filename != "" && data != nil {
-		img, err := imager.Decode(bytes.NewReader(data))
+	if data != nil {
+		image, err := imager.New(s.Storage).CreateImage(data)
 		if err != nil {
-			return nil, model.NewAppError("app.post.create.image_decode_error", err.Error())
+			return nil, err
 		}
-
-		resultCh := s.Storage.Put(filename, data)
-
-		// Create thumbnails
-		thumbnails, _ := imager.New(s.Storage).CreateThumbnails(img, filename)
-
-		if result := <-resultCh; result.Err != nil {
-			return nil, result.Err
-		}
-
-		base, _ := url.Parse(s.Storage.GetBaseURL())
-		f, _ := url.Parse(filename)
-
-		image := model.NewImage(model.ImageOriginal{
-			URL:    base.ResolveReference(f).String(),
-			Width:  img.Bounds().Dx(),
-			Height: img.Bounds().Dy(),
-		})
-		image.Thumbnails = thumbnails
-
 		post.AddImage(image)
 	}
 

@@ -3,9 +3,6 @@ package imager
 import (
 	"bytes"
 	"image"
-	_ "image/gif"
-	"image/jpeg"
-	_ "image/png"
 	"io"
 	"net/url"
 	"path/filepath"
@@ -13,14 +10,26 @@ import (
 	"strconv"
 	"sync"
 
+	_ "golang.org/x/image/webp"
+	_ "image/gif"
+	"image/jpeg"
+	_ "image/png"
+
 	"github.com/Sirupsen/logrus"
 	"github.com/disintegration/imaging"
 	"github.com/minchao/shurara/model"
 	"github.com/minchao/shurara/storage"
+	"github.com/rs/xid"
 )
 
 var (
 	thumbnailSizes = []int{300, 1024}
+
+	allowedFormats = map[string]string{
+		"jpeg": "jpg",
+		"png":  "png",
+		"webp": "webp",
+	}
 )
 
 type result struct {
@@ -28,8 +37,25 @@ type result struct {
 	err       error
 }
 
-func Decode(r io.Reader) (image.Image, error) {
-	return imaging.Decode(r)
+func Decode(r io.Reader) (img image.Image, cnf image.Config, format string, err error) {
+	var bufA, bufB bytes.Buffer
+
+	_, err = io.Copy(&bufA, io.TeeReader(r, &bufB))
+	if err != nil {
+		return img, cnf, format, err
+	}
+
+	cnf, format, err = image.DecodeConfig(&bufA)
+	if err != nil {
+		return img, cnf, format, err
+	}
+
+	img, err = imaging.Decode(&bufB)
+	if err != nil {
+		return img, cnf, format, err
+	}
+
+	return img, cnf, format, nil
 }
 
 type Imager struct {
@@ -40,7 +66,40 @@ func New(s storage.Storage) *Imager {
 	return &Imager{storage: s}
 }
 
-func (i *Imager) CreateThumbnails(img image.Image, filePath string) ([]*model.ImageThumbnail, *model.AppError) {
+func (i *Imager) CreateImage(data []byte) (*model.Image, *model.AppError) {
+	img, cnf, format, err := Decode(bytes.NewReader(data))
+	if err != nil {
+		return nil, model.NewAppError("imager.create_image.decode_error", err.Error())
+	}
+
+	_, ok := allowedFormats[format]
+	if !ok {
+		return nil, model.NewAppError("imager.create_image.format_error", "Not allowed format")
+	}
+
+	filename := xid.New().String() + "." + format
+	base, _ := url.Parse(i.storage.GetBaseURL())
+	f, _ := url.Parse(filename)
+	imageModel := model.NewImage(model.ImageOriginal{
+		URL:    base.ResolveReference(f).String(),
+		Width:  cnf.Width,
+		Height: cnf.Height,
+	})
+
+	resultCh := i.storage.Put(filename, data)
+
+	if thumbnails, _ := i.CreateThumbnails(img, format, filename); thumbnails != nil && len(thumbnails) > 0 {
+		imageModel.Thumbnails = thumbnails
+	}
+
+	if result := <-resultCh; result.Err != nil {
+		return nil, result.Err
+	}
+
+	return imageModel, nil
+}
+
+func (i *Imager) CreateThumbnails(img image.Image, format string, filePath string) ([]*model.ImageThumbnail, *model.AppError) {
 	var (
 		channel    = make(chan result, len(thumbnailSizes))
 		wait       = sync.WaitGroup{}
@@ -55,8 +114,8 @@ func (i *Imager) CreateThumbnails(img image.Image, filePath string) ([]*model.Im
 			base, _ := url.Parse(i.storage.GetBaseURL())
 
 			go func(size int) {
-				path := genThumbnailFilePath(filePath, "_"+strconv.Itoa(size), ".jpg")
-				w, h, err := i.process(imaging.Fit, img, size, size, path)
+				path := genThumbnailFilePath(filePath, "_"+strconv.Itoa(size), "."+format)
+				w, h, err := i.process(imaging.Fit, img, format, size, size, path)
 
 				r := result{err: err}
 
@@ -96,6 +155,7 @@ func (i *Imager) CreateThumbnails(img image.Image, filePath string) ([]*model.Im
 func (i *Imager) process(
 	proc func(image.Image, int, int, imaging.ResampleFilter) *image.NRGBA,
 	image image.Image,
+	format string,
 	width,
 	height int,
 	path string,

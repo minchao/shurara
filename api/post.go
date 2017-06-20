@@ -3,12 +3,10 @@ package api
 import (
 	"io/ioutil"
 	"net/http"
-	"path/filepath"
 
 	"github.com/go-playground/form"
 	"github.com/gorilla/mux"
 	"github.com/minchao/shurara/model"
-	"github.com/rs/xid"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -61,7 +59,6 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 		req      postReq
 		post     *model.Post
 		hasImage bool
-		filename string
 		data     []byte
 	)
 
@@ -83,7 +80,7 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 	if hasImage {
 		post.Type = model.PostTypeImage
 
-		file, header, err := r.FormFile("image")
+		file, _, err := r.FormFile("image")
 		if err != nil {
 			renderAppError(w, model.NewAppError("api.post.post.bad_request", "Image parsing error").
 				SetStatusCode(http.StatusBadRequest))
@@ -91,11 +88,10 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 
-		filename = xid.New().String() + filepath.Ext(header.Filename)
 		data, _ = ioutil.ReadAll(file)
 	}
 
-	result, err := s.app.CreatePost(boardId, post, filename, data)
+	result, err := s.app.CreatePost(boardId, post, data)
 	if err != nil {
 		renderAppError(w, err.SetStatusCode(http.StatusInternalServerError))
 		return
