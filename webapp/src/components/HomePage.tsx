@@ -29,6 +29,7 @@ export default class HomePage extends React.Component<IProps, any> {
         if (this.props.board.location !== currentLocation) {
             this.props.board.location = currentLocation
             this.fetchData()
+            window.scrollTo(0, 0)
         }
     }
 
