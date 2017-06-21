@@ -81,7 +81,13 @@ export default class Board extends React.Component<IProps, any> {
     }
 
     private onPostFormSubmit = () => {
-        this.props.routing.push(`${this.getBoardId()}?${Date.now()}`)
+        let location = "/" + this.getBoardId()
+        let limit: number = +(new URLSearchParams(this.props.routing.location.search)).get("limit")
+        if (limit > 0) {
+            location += "?limit=" + limit
+        }
+        this.props.board.location = ""
+        this.props.routing.push(location)
     }
 
     private pagingPrevious = () => {

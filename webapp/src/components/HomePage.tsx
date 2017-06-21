@@ -19,17 +19,15 @@ interface IProps {
 @observer
 export default class HomePage extends React.Component<IProps, any> {
 
-    private prevLocation: string
-
     public componentDidMount() {
-        this.prevLocation = this.getCurrentLocation()
+        this.props.board.location = this.getCurrentLocation()
         this.fetchData()
     }
 
     public componentDidUpdate(prevProps) {
         const currentLocation = this.getCurrentLocation()
-        if (this.prevLocation !== currentLocation) {
-            this.prevLocation = currentLocation
+        if (this.props.board.location !== currentLocation) {
+            this.props.board.location = currentLocation
             this.fetchData()
         }
     }

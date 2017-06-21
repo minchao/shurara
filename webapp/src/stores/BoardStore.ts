@@ -11,6 +11,8 @@ export default class BoardStore {
         return store
     }
 
+    public location: string
+
     @observable public loading: boolean = false
     @observable public board: IBoard
     @observable public posts: PostModel[] = []
