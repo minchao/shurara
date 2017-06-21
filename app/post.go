@@ -48,6 +48,7 @@ func (s *Server) GetPostList(boardId string, limit int, since, until int64) (*mo
 			postList.Paging.Previous = u.String()
 		}
 		if postsResult := <-nextCh; postsResult.Err == nil && len(postsResult.Data.([]*model.Post)) > 0 {
+			values.Del("since")
 			values.Set("until", strconv.FormatInt(until, 10))
 			u.RawQuery = values.Encode()
 
