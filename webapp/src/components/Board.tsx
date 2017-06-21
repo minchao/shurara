@@ -82,7 +82,7 @@ export default class Board extends React.Component<IProps, any> {
 
     private onPostFormSubmit = () => {
         let location = "/" + this.getBoardId()
-        let limit: number = +(new URLSearchParams(this.props.routing.location.search)).get("limit")
+        const limit: number = +(new URLSearchParams(this.props.routing.location.search)).get("limit")
         if (limit > 0) {
             location += "?limit=" + limit
         }
