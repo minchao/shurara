@@ -18,7 +18,7 @@ export default class Post extends React.Component<IProps, any> {
         const post = this.props.post
         const getThumbnail = (image: IImage, size: number): string => {
             if (image.thumbnails.length > 0) {
-                const thumbnail = image.thumbnails.find((thumbnail) => thumbnail.width === size)
+                const thumbnail = image.thumbnails.find((t) => t.width === size)
                 if (thumbnail) {
                     return thumbnail.url
                 }
