@@ -70,6 +70,7 @@ export default class PostForm extends React.Component<IProps, any> {
                     <Button
                         content="Cancel"
                         icon="cancel"
+                        disabled={this.loading}
                         onClick={this.handleClose}
                     />
                     <Button
@@ -77,6 +78,7 @@ export default class PostForm extends React.Component<IProps, any> {
                         type="submit"
                         content="Submit"
                         icon="add"
+                        disabled={this.loading}
                         loading={this.loading}
                         onClick={this.handleSubmit}
                     />
