@@ -3,11 +3,13 @@ import * as moment from "moment"
 import * as React from "react"
 import {Comment, Item} from "semantic-ui-react"
 
+import {IBoard} from "../models/BoardModel"
 import PostModel, {IImage} from "../models/PostModel"
 import PostComment from "./PostComment"
 import PostReply from "./PostReply"
 
 interface IProps {
+    board: IBoard
     post: PostModel
     openModal: (src: string) => void
 }
@@ -51,7 +53,7 @@ export default class Post extends React.Component<IProps, any> {
                         </Comment.Group>
                     }
 
-                    <PostReply post={post}/>
+                    <PostReply board={this.props.board} post={post}/>
                 </Item.Content>
             </Item>
         )

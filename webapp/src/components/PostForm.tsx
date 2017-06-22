@@ -107,7 +107,7 @@ export default class PostForm extends React.Component<IProps, any> {
         this.props.form.post((json: object, error?: IError) => {
             this.loading = false
             if (error === undefined) {
-                this.open = false
+                this.handleClose()
                 if (this.props.onSubmit) {
                     this.props.onSubmit()
                 }

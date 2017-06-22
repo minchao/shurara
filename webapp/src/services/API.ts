@@ -10,6 +10,13 @@ export interface IBoardPostBody {
     image?: File
 }
 
+export interface ICommentForm {
+    boardId: string
+    postId: string
+    name: string
+    body: string
+}
+
 class API {
     public fetch(url: string, object: object, callback: (json: object, error?: IError) => void) {
         fetch(
@@ -48,6 +55,14 @@ class API {
         }
 
         this.fetch(`/api/boards/${post.board}/posts`, {method: "post", body: data}, callback)
+    }
+
+    public postComment(post: ICommentForm, callback: (json: object, error?: IError) => void) {
+        const data = new FormData()
+        data.append("name", post.name)
+        data.append("body", post.body)
+
+        this.fetch(`/api/boards/${post.boardId}/posts/${post.postId}/comments`, {method: "post", body: data}, callback)
     }
 }
 

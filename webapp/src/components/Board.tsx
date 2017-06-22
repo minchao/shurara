@@ -42,6 +42,7 @@ export default class Board extends React.Component<IProps, any> {
                     <Item.Group divided>
                         {this.props.board.posts.map((post) => (
                             <Post
+                                board={this.props.board.board}
                                 post={post}
                                 key={post.id}
                                 openModal={this.openModal}
