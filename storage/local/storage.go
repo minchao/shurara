@@ -71,10 +71,10 @@ func (s *Storage) Put(path string, data []byte) storage.Channel {
 func isDirExist(path string) (bool, error) {
 	fi, err := os.Stat(path)
 	if err != nil {
-		return false, err
+		return false, nil
 	}
 	if !fi.IsDir() {
-		return false, errors.New("not dir")
+		return false, errors.New("not a directory")
 	}
 	return true, nil
 }
