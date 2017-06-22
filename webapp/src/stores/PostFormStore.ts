@@ -45,7 +45,7 @@ export default class PostFormStore {
     }
 
     public post(cb: (json: object, error: object) => void) {
-        api.postBoardPost({
+        api.postPost({
             board: this.board,
             body: this.body,
             image: this.image,

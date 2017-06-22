@@ -3,7 +3,7 @@ export interface IError {
     error_description?: string
 }
 
-export interface IBoardPostBody {
+export interface IPostForm {
     board: string
     name: string
     body: string
@@ -46,7 +46,7 @@ class API {
         this.fetch(`/api/boards/${boardId}${query}`, {method: "get"}, callback)
     }
 
-    public postBoardPost(post: IBoardPostBody, callback: (json: object, error?: IError) => void) {
+    public postPost(post: IPostForm, callback: (json: object, error?: IError) => void) {
         const data = new FormData()
         data.append("name", post.name)
         data.append("body", post.body)
