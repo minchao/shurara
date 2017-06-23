@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"errors"
 	"sync"
 	"time"
 
@@ -16,6 +17,25 @@ func init() {
 // Plugin returns memory store.
 func Plugin(_ *viper.Viper) (store.Store, error) {
 	return New(), nil
+}
+
+type board struct {
+	board model.Board
+	posts []*model.Post
+}
+
+type boardWrap struct {
+	board board
+	sync.RWMutex
+}
+
+func newBoardWrap(b model.Board) *boardWrap {
+	return &boardWrap{
+		board: board{
+			board: b,
+			posts: []*model.Post{},
+		},
+	}
 }
 
 type Store struct {
@@ -57,27 +77,12 @@ func (s *Store) create(board *model.Board) {
 	s.database[board.Slug] = newBoardWrap(*board)
 }
 
-func (s *Store) get(boardId string) *boardWrap {
+func (s *Store) get(boardId string) (*boardWrap, error) {
 	s.Lock()
 	defer s.Unlock()
-	return s.database[boardId]
-}
-
-type board struct {
-	board model.Board
-	posts []*model.Post
-}
-
-type boardWrap struct {
-	board board
-	sync.RWMutex
-}
-
-func newBoardWrap(b model.Board) *boardWrap {
-	return &boardWrap{
-		board: board{
-			board: b,
-			posts: []*model.Post{},
-		},
+	bw, ok := s.database[boardId]
+	if !ok {
+		return nil, errors.New("Board not found")
 	}
+	return bw, nil
 }

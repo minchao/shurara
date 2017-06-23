@@ -19,9 +19,9 @@ func (s *BoardStore) Get(id string) store.Channel {
 	go func() {
 		result := store.Result{}
 
-		boardWrap := s.store.get(id)
-		if boardWrap == nil {
-			result.Err = model.NewAppError("store.board.get.error", "Board not found")
+		boardWrap, err := s.store.get(id)
+		if err != nil {
+			result.Err = model.NewAppError("store.board.get.error", err.Error())
 		} else {
 			result.Data = &boardWrap.board.board
 		}

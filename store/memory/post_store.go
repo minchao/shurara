@@ -30,9 +30,9 @@ func (s *PostStore) Save(boardId string, post *model.Post) store.Channel {
 	go func() {
 		result := store.Result{}
 
-		boardWrap := s.store.get(boardId)
-		if boardWrap == nil {
-			result.Err = model.NewAppError("store.post.save.error", "Board not found")
+		boardWrap, err := s.store.get(boardId)
+		if boardWrap != nil {
+			result.Err = model.NewAppError("store.post.save.error", err.Error())
 		} else {
 			boardWrap.Lock()
 			defer boardWrap.Unlock()
@@ -56,9 +56,9 @@ func (s *PostStore) Search(boardId string, limit int, since, until int64) store.
 	go func() {
 		result := store.Result{}
 
-		boardWrap := s.store.get(boardId)
-		if boardWrap == nil {
-			result.Err = model.NewAppError("store.post.search.error", "Board not found")
+		boardWrap, err := s.store.get(boardId)
+		if err != nil {
+			result.Err = model.NewAppError("store.post.search.error", err.Error())
 		} else {
 			boardWrap.RLock()
 			defer boardWrap.RUnlock()
