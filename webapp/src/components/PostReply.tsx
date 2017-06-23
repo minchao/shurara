@@ -1,18 +1,19 @@
 import {action, observable} from "mobx"
-import {observer} from "mobx-react"
+import {inject, observer} from "mobx-react"
 import * as React from "react"
 import {Button, Form, Message} from "semantic-ui-react"
 
-import {IBoard} from "../models/BoardModel"
 import PostModel from "../models/PostModel"
 import {IError} from "../services/API"
+import BoardStore from "../stores/BoardStore"
 import PostReplyFormStore from "../stores/PostReplyFormStore"
 
 interface IProps {
-    board: IBoard
+    board?: BoardStore
     post: PostModel
 }
 
+@inject("board")
 @observer
 export default class PostReply extends React.Component<IProps, any> {
 
@@ -79,7 +80,7 @@ export default class PostReply extends React.Component<IProps, any> {
 
     @action private handleOpen = () => {
         this.form.reset()
-        this.form.setBoardId(this.props.board.slug)
+        this.form.setBoardId(this.props.board.board.slug)
         this.form.setPostId(this.props.post.id)
         this.open = true
         this.loading = false
@@ -96,8 +97,10 @@ export default class PostReply extends React.Component<IProps, any> {
             return
         }
         this.loading = true
-        this.form.post((json: object, error?: IError) => {
+        this.form.post((json: any, error?: IError) => {
+            this.loading = false
             if (error === undefined) {
+                this.props.board.updatePost(json.id, PostModel.fromJS(json))
                 this.handleClose()
             } else {
                 this.form.setError(true)

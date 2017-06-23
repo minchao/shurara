@@ -1,7 +1,7 @@
 import {action, observable} from "mobx"
 
 import {IBoard, IPaging} from "../models/BoardModel"
-import PostModel from "../models/PostModel"
+import PostModel, {IComment} from "../models/PostModel"
 import api, {IError} from "../services/API"
 
 export default class BoardStore {
@@ -44,6 +44,15 @@ export default class BoardStore {
                 this.reset()
             }
             this.loading = false
+        })
+    }
+
+    @action
+    public updatePost(postId: string, post: PostModel) {
+        this.posts.map((v, i, _) => {
+            if (v.id === post.id) {
+                this.posts[i] = post
+            }
         })
     }
 }
