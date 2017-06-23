@@ -76,3 +76,11 @@ func (s *Server) CreatePost(boardId string, post *model.Post, data []byte) (*mod
 
 	return result.Data.(*model.Post), nil
 }
+
+func (s *Server) CreateComment(boardId, postId string, comment *model.Comment) (*model.Post, *model.AppError) {
+	result := <-s.Store.Post().SaveComment(boardId, postId, comment)
+	if result.Err != nil {
+		return nil, result.Err
+	}
+	return result.Data.(*model.Post), nil
+}

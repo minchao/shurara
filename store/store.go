@@ -55,7 +55,8 @@ type BoardStore interface {
 }
 
 type PostStore interface {
-	Get(id string) Channel
+	Get(boardId, id string) Channel
 	Save(boardId string, post *model.Post) Channel
 	Search(boardId string, limit int, since, until int64) Channel
+	SaveComment(boardId, postId string, comment *model.Comment) Channel
 }

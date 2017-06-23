@@ -16,10 +16,38 @@ func NewPostStore(store *Store) store.PostStore {
 	return &PostStore{store}
 }
 
-func (s *PostStore) Get(id string) store.Channel {
+func (s *PostStore) get(boardWrap *boardWrap, id string) store.Result {
+	result := store.Result{}
+	for _, p := range boardWrap.board.posts {
+		if p.Id == id {
+			result.Data = p
+			return result
+		}
+	}
+	result.Err = model.NewAppError("store.post.get.error", "Post not found")
+
+	return result
+}
+
+func (s *PostStore) Get(boardId, id string) store.Channel {
 	channel := make(store.Channel, 1)
 
-	// TODO
+	go func() {
+		result := store.Result{}
+
+		boardWrap, err := s.store.get(boardId)
+		if err != nil {
+			result.Err = model.NewAppError("store.post.get.error", err.Error())
+		} else {
+			boardWrap.Lock()
+			defer boardWrap.Unlock()
+
+			result = s.get(boardWrap, id)
+		}
+
+		channel <- result
+		close(channel)
+	}()
 
 	return channel
 }
@@ -104,6 +132,33 @@ func (s *PostStore) Search(boardId string, limit int, since, until int64) store.
 			}
 
 			result.Data = posts
+		}
+
+		channel <- result
+		close(channel)
+	}()
+
+	return channel
+}
+
+func (s *PostStore) SaveComment(boardId, postId string, comment *model.Comment) store.Channel {
+	channel := make(store.Channel, 1)
+
+	go func() {
+		result := store.Result{}
+
+		boardWrap, err := s.store.get(boardId)
+		if err != nil {
+			result.Err = model.NewAppError("store.post.save_comment.error", err.Error())
+		} else {
+			boardWrap.Lock()
+			defer boardWrap.Unlock()
+
+			result = s.get(boardWrap, postId)
+			if result.Err == nil {
+				p := result.Data.(*model.Post)
+				p.Comments = append(p.Comments, comment)
+			}
 		}
 
 		channel <- result

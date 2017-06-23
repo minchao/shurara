@@ -25,6 +25,7 @@ func (s *Server) init() {
 	router.HandleFunc("/", ok).Methods("GET")
 	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}", s.getPostList).Methods("GET")
 	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}/posts", s.postPost).Methods("POST")
+	router.HandleFunc("/boards/{board_id:[A-Za-z0-9]+}/posts/{post_id:[A-Za-z0-9]+}/comments", s.postComment).Methods("POST")
 
 	n := negroni.New()
 

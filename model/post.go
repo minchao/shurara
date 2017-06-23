@@ -73,13 +73,6 @@ func (t ImageThumbnailByWidth) Len() int           { return len(t) }
 func (t ImageThumbnailByWidth) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
 func (t ImageThumbnailByWidth) Less(i, j int) bool { return t[i].Width < t[j].Width }
 
-type Comment struct {
-	Type      string `json:"type"`
-	Timestamp int64  `json:"timestamp"`
-	User      User   `json:"user"`
-	Body      string `json:"body"`
-}
-
 type Paging struct {
 	Previous string `json:"previous,omitempty"`
 	Next     string `json:"next,omitempty"`
