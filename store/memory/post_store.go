@@ -31,7 +31,7 @@ func (s *PostStore) Save(boardId string, post *model.Post) store.Channel {
 		result := store.Result{}
 
 		boardWrap, err := s.store.get(boardId)
-		if boardWrap != nil {
+		if err != nil {
 			result.Err = model.NewAppError("store.post.save.error", err.Error())
 		} else {
 			boardWrap.Lock()
