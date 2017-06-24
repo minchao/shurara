@@ -35,6 +35,10 @@ func (s *Server) postComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.Name == "" {
+		req.Name = "Anonymous"
+	}
+
 	post, err := s.app.CreateComment(
 		boardId,
 		postId,

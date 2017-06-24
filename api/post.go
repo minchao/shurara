@@ -75,6 +75,10 @@ func (s *Server) postPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.Name == "" {
+		req.Name = "Anonymous"
+	}
+
 	post = model.NewPost(model.User{Id: "tester", Name: req.Name}, req.Body)
 
 	if hasImage {
