@@ -1,17 +1,23 @@
 import * as React from "react"
 
 export const Text = ({message}) => {
-    const output = message.split("\n").map(
+    let prev: string = ""
+    const messageArr = message.split("\n")
+    const output = messageArr.map(
         (text, index) => {
             if (text.trim().length > 0) {
-                return <p key={index}>{text}</p>
+                prev = text
+                return <span key={index}>{text}{(index !== messageArr.length - 1) && <br/>}</span>
             }
-            return <br key={index}/>
+            if (text !== prev) {
+                prev = text
+                return <br key={index}/>
+            }
         },
     )
     return (
-        <div>
+        <p>
             {message.length > 0 ? output : null}
-        </div>
+        </p>
     )
 }
