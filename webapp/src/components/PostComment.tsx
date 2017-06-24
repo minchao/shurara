@@ -4,6 +4,7 @@ import * as React from "react"
 import {Comment} from "semantic-ui-react"
 
 import {IComment} from "../models/PostModel"
+import {Text} from "./Text"
 
 interface IProps {
     comment?: IComment
@@ -22,7 +23,7 @@ export default class PostComment extends React.Component<IProps, any> {
                         <div>{moment(comment.timestamp).fromNow()}</div>
                     </Comment.Metadata>
                     <Comment.Text>
-                        <p>{comment.body}</p>
+                        <Text message={comment.body}/>
                     </Comment.Text>
                 </Comment.Content>
             </Comment>

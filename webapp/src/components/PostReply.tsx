@@ -100,7 +100,7 @@ export default class PostReply extends React.Component<IProps, any> {
         this.form.post((json: any, error?: IError) => {
             this.loading = false
             if (error === undefined) {
-                this.props.board.updatePost(json.id, PostModel.fromJS(json))
+                this.props.board.updatePost(PostModel.fromJS(json))
                 this.handleClose()
             } else {
                 this.form.setError(true)
@@ -109,10 +109,10 @@ export default class PostReply extends React.Component<IProps, any> {
     }
 
     private handleNameChange = (event: any) => {
-        this.form.setName(event.target.value)
+        this.form.setName(event.target.value.trim())
     }
 
     private handleBodyChange = (event: any) => {
-        this.form.setBody(event.target.value)
+        this.form.setBody(event.target.value.trim())
     }
 }

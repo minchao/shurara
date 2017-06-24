@@ -118,11 +118,11 @@ export default class PostForm extends React.Component<IProps, any> {
     }
 
     private handleNameChange = (event: any) => {
-        this.props.form.setName(event.target.value)
+        this.props.form.setName(event.target.value.trim())
     }
 
     private handleBodyChange = (event: any) => {
-        this.props.form.setBody(event.target.value)
+        this.props.form.setBody(event.target.value.trim())
     }
 
     private handleImageChange = (event: any) => {
