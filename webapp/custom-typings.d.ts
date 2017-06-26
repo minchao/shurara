@@ -16,4 +16,6 @@ interface WebpackModule {
     };
 }
 
+declare const IS_DEV: boolean
+
 declare const API_HOST: string

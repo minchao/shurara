@@ -19,7 +19,7 @@ const render = (Component) => {
 
 render(App)
 
-if (module.hot) {
+if (IS_DEV && module.hot) {
     module.hot.accept("./components/App", () => {
         render(App)
     })
