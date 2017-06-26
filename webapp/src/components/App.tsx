@@ -20,6 +20,10 @@ const stores = {
     routing: routingStore,
 }
 
+if (IS_DEV) {
+    (window as any).stores = stores
+}
+
 export default class App extends React.Component<any, any> {
     public render() {
         return (
