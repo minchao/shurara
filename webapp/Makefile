@@ -1,10 +1,16 @@
-.PHONY: yarn-install build build-with-docker clean
+.PHONY: lint build build-with-docker clean
 
-yarn-install: clean
+.yarn-install:
 	@echo Getting dependencies using yarn
 	yarn install
 
-build: yarn-install
+	touch $@
+
+lint: .yarn-install
+	@echo Checking lint
+	yarn run tslint
+
+build: .yarn-install
 	@echo Building webapp
 	yarn run build
 
@@ -14,4 +20,5 @@ build-with-docker:
 
 clean:
 	@echo Cleaning up previous build data
+	rm -f .yarn-install
 	rm -rf dist node_modules
