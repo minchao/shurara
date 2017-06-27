@@ -1,4 +1,6 @@
-.PHONY: build build-with-docker clean docker-build
+.PHONY: check-style build build-with-docker clean docker-build
+
+PACKAGES=$(shell go list ./... | grep -v vendor)
 
 .deps-install:
 	@echo Getting dependencies using Glide
@@ -7,7 +9,22 @@
 
 	touch $@
 
-build: .deps-install
+vet:
+	@echo Running go vet
+	@go vet $(PACKAGES)
+
+check-style: vet
+	@echo Running go fmt
+	$(eval GO_FMT_OUTPUT := $(shell go fmt $(PACKAGES)))
+	@echo "$(GO_FMT_OUTPUT)"
+	@if [ ! "$(GO_FMT_OUTPUT)" ]; then \
+		echo "go fmt success"; \
+	else \
+		echo "go fmt failure"; \
+		exit 1; \
+	fi
+
+build: .deps-install check-style
 	@echo Building app
 	go build
 
