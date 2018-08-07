@@ -26,7 +26,7 @@ check-style: vet
 
 build: .deps-install check-style
 	@echo Building app
-	go build
+	cd cmd/shurara && go build -o ../../shurara
 
 build-with-docker:
 	@echo Building app with Docker
@@ -41,5 +41,4 @@ clean:
 docker-build: clean build-with-docker
 	@echo Building Docker image
 	cd webapp && make clean && make build-with-docker
-	cd ..
 	docker build -t minchao/shurara.com:latest .

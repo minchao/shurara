@@ -1,14 +1,17 @@
-package cmd
+package main
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"github.com/spf13/cobra"
+
 	"github.com/minchao/shurara/api"
 	"github.com/minchao/shurara/app"
-	"github.com/spf13/cobra"
+	_ "github.com/minchao/shurara/storage/local"
+	_ "github.com/minchao/shurara/store/memory"
 )
 
-// Execute executes the shurara command.
-func Execute() {
+// main executes the shurara command.
+func main() {
 	var configFile string
 	var debug bool
 
