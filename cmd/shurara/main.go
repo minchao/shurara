@@ -1,13 +1,13 @@
 package main
 
 import (
+	"github.com/minchao/shurara/internal/app/shurara/api"
+	"github.com/minchao/shurara/internal/app/shurara/core"
+	_ "github.com/minchao/shurara/internal/app/shurara/storage/local"
+	_ "github.com/minchao/shurara/internal/app/shurara/store/memory"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/spf13/cobra"
-
-	"github.com/minchao/shurara/api"
-	"github.com/minchao/shurara/app"
-	_ "github.com/minchao/shurara/storage/local"
-	_ "github.com/minchao/shurara/store/memory"
 )
 
 // main executes the shurara command.
@@ -33,7 +33,7 @@ func rootCmdF(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	server := app.New()
+	server := core.New()
 	api.Init(server)
 	server.Run()
 }

@@ -3,8 +3,9 @@ package memory
 import (
 	"time"
 
-	"github.com/minchao/shurara/model"
-	"github.com/minchao/shurara/store"
+	"github.com/minchao/shurara/internal/app/shurara/model"
+	"github.com/minchao/shurara/internal/app/shurara/store"
+
 	"github.com/rs/xid"
 )
 

@@ -1,13 +1,14 @@
-package app
+package core
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/minchao/shurara/internal/app/shurara/storage"
+	"github.com/minchao/shurara/internal/app/shurara/store"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
-	"github.com/minchao/shurara/storage"
-	"github.com/minchao/shurara/store"
 	config "github.com/spf13/viper"
 	"github.com/urfave/negroni"
 )

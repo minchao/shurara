@@ -6,8 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/minchao/shurara/model"
-	"github.com/minchao/shurara/storage"
+	"github.com/minchao/shurara/internal/app/shurara/model"
+	"github.com/minchao/shurara/internal/app/shurara/storage"
+
 	config "github.com/spf13/viper"
 )
 

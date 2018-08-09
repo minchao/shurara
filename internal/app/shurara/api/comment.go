@@ -3,9 +3,10 @@ package api
 import (
 	"net/http"
 
+	"github.com/minchao/shurara/internal/app/shurara/model"
+
 	"github.com/go-playground/form"
 	"github.com/gorilla/mux"
-	"github.com/minchao/shurara/model"
 	"gopkg.in/go-playground/validator.v9"
 )
 

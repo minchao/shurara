@@ -3,8 +3,9 @@ package store
 import (
 	"fmt"
 
+	"github.com/minchao/shurara/internal/app/shurara/model"
+
 	log "github.com/Sirupsen/logrus"
-	"github.com/minchao/shurara/model"
 	config "github.com/spf13/viper"
 )
 

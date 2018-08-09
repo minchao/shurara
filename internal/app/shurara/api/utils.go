@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/minchao/shurara/model"
+	"github.com/minchao/shurara/internal/app/shurara/model"
 )
 
 func render(w http.ResponseWriter, statusCode int, data interface{}) error {

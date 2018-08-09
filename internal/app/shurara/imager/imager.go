@@ -3,6 +3,9 @@ package imager
 import (
 	"bytes"
 	"image"
+	_ "image/gif"
+	"image/jpeg"
+	_ "image/png"
 	"io"
 	"net/url"
 	"path/filepath"
@@ -10,16 +13,13 @@ import (
 	"strconv"
 	"sync"
 
-	_ "golang.org/x/image/webp"
-	_ "image/gif"
-	"image/jpeg"
-	_ "image/png"
+	"github.com/minchao/shurara/internal/app/shurara/model"
+	"github.com/minchao/shurara/internal/app/shurara/storage"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/disintegration/imaging"
-	"github.com/minchao/shurara/model"
-	"github.com/minchao/shurara/storage"
 	"github.com/rs/xid"
+	_ "golang.org/x/image/webp"
 )
 
 var (

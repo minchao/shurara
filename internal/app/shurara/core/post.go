@@ -1,4 +1,4 @@
-package app
+package core
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/minchao/shurara/imager"
-	"github.com/minchao/shurara/model"
+	"github.com/minchao/shurara/internal/app/shurara/imager"
+	"github.com/minchao/shurara/internal/app/shurara/model"
 )
 
 func (s *Server) GetPostList(boardId string, limit int, since, until int64) (*model.PostList, *model.AppError) {

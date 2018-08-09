@@ -1,19 +1,20 @@
 package api
 
 import (
+	"github.com/minchao/shurara/internal/app/shurara/core"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
-	"github.com/minchao/shurara/app"
 	"github.com/rs/cors"
 	config "github.com/spf13/viper"
 	"github.com/urfave/negroni"
 )
 
 type Server struct {
-	app *app.Server
+	app *core.Server
 }
 
-func Init(app *app.Server) {
+func Init(app *core.Server) {
 	log.Debug("api.Init")
 
 	server := Server{app: app}

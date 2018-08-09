@@ -1,8 +1,8 @@
 package memory
 
 import (
-	"github.com/minchao/shurara/model"
-	"github.com/minchao/shurara/store"
+	"github.com/minchao/shurara/internal/app/shurara/model"
+	"github.com/minchao/shurara/internal/app/shurara/store"
 )
 
 type BoardStore struct {
