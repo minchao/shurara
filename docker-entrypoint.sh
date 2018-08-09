@@ -2,4 +2,4 @@
 
 echo "Starting app"
 cd /shurara
-exec ./shurara -c ./config/config.yml
+exec ./shurara -c ./configs/config.yml

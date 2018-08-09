@@ -10,6 +10,6 @@ COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT /docker-entrypoint.sh
 
-VOLUME [ "/shurara/config", "/shurara/www" ]
+VOLUME [ "/shurara/configs", "/shurara/www" ]
 
 EXPOSE 8080
