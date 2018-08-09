@@ -29,7 +29,7 @@ func (s *Server) Run() {
 	var (
 		err  error
 		addr = config.GetString("http.addr")
-		dist = "./webapp/dist"
+		dist = "./web/dist"
 	)
 
 	storeName := config.GetString("store.name")

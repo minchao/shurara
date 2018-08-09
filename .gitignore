@@ -1,5 +1,5 @@
-webapp/node_modules/
-webapp/dist/
-vendor/
+/web/node_modules/
+/web/dist/
+/vendor/
 
 .idea/

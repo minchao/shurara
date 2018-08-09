@@ -9,10 +9,10 @@ pipeline:
     commands:
       - make build
 
-  webapp:
+  web:
     group: build
     image: node:6.11
     commands:
-      - cd ./webapp
+      - cd ./web
       - make lint
       - make build

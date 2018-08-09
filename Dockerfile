@@ -4,7 +4,7 @@ RUN apt-get update
 RUN mkdir /shurara
 
 COPY shurara /shurara/
-COPY webapp/dist /shurara/webapp/dist/
+COPY web/dist /shurara/web/dist/
 COPY docker-entrypoint.sh /
 
 RUN chmod +x /docker-entrypoint.sh

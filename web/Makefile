@@ -11,11 +11,11 @@ lint: .yarn-install
 	yarn run tslint
 
 build: .yarn-install
-	@echo Building webapp
+	@echo Building web
 	yarn run build
 
 build-with-docker:
-	@echo Building webapp with Docker
+	@echo Building web with Docker
 	docker run --rm -v $(PWD):/shurara -w /shurara node:6.11 sh -c "make build"
 
 clean:

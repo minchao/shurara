@@ -40,5 +40,5 @@ clean:
 
 docker-build: clean build-with-docker
 	@echo Building Docker image
-	cd webapp && make clean && make build-with-docker
+	cd web && make clean && make build-with-docker
 	docker build -t minchao/shurara.com:latest .
