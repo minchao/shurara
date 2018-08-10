@@ -1,5 +1,8 @@
-/web/node_modules/
-/web/dist/
+.idea/
+
+/.deps-install
 /vendor/
 
-.idea/
+/web/node_modules/
+/web/dist/
+/web/.yarn-install
