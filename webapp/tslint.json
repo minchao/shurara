@@ -1,6 +1,6 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ]
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ]
 }

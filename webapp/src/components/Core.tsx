@@ -10,14 +10,14 @@ import Link from "./Link";
  */
 
 const Core = ({children}) =>
-    <div>
-        <nav>
-            <Link href="/">Home</Link>
-            <Link href="/help">Help</Link>
-        </nav>
-        <main>
-            {children}
-        </main>
-    </div>;
+  <div>
+    <nav>
+      <Link href="/">Home</Link>
+      <Link href="/help">Help</Link>
+    </nav>
+    <main>
+      {children}
+    </main>
+  </div>;
 
 export default Core;
