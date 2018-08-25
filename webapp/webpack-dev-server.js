@@ -15,6 +15,7 @@ const env = {
 };
 
 const devServerConfig = {
+  hot: true,
   lazy: false,
   contentBase: path.join(__dirname, './src/'),
   historyApiFallback: true,

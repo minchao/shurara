@@ -15,7 +15,7 @@ module.exports = (env) => {
     entry: {
       app: removeEmpty([
         ifDev(`webpack-dev-server/client?http://localhost:${env.port}`),
-        ifDev('webpack/hot/only-dev-server'),
+        ifDev('webpack/hot/dev-server'),
         path.join(__dirname, './src/index.ts')
       ]),
     },
