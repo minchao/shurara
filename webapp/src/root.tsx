@@ -13,10 +13,9 @@ interface IProps {
 class Root extends React.Component<IProps, {}> {
 
   public render() {
-    const {route} = this.props.app;
     return (
       <div>
-        <Core children={route}/>
+        <Core app={this.props.app}/>
         <DevTools/>
       </div>
     );

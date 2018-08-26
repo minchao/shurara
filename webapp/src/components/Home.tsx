@@ -1,10 +1,15 @@
-import {observer} from "mobx-react";
+import {inject, observer} from "mobx-react";
 import * as React from "react";
 
 import AppState from "../stores/AppState";
 
+interface IProps {
+  appState: AppState;
+}
+
+@inject("appState")
 @observer
-class Home extends React.Component<{ appState: AppState }, any> {
+class Home extends React.Component<IProps, any> {
 
   public render() {
     return (

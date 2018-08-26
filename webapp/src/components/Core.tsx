@@ -1,23 +1,26 @@
+import {Provider} from "mobx-react";
 import * as React from "react";
+import {Link, Route, Router, Switch} from "react-router-dom";
 
-import Link from "./Link";
+import Help from "./Help";
+import Home from "./Home";
 
-/**
- * <Core />
- * Wraps all our child components to provide global navigation.
- * This makes it simple to have a component at the index "/" route
- * of our application.
- */
-
-const Core = ({children}) =>
-  <div>
-    <nav>
-      <Link href="/">Home</Link>
-      <Link href="/help">Help</Link>
-    </nav>
-    <main>
-      {children}
-    </main>
-  </div>;
+const Core = ({app}) =>
+  <Provider {...app}>
+    <Router history={app.history}>
+      <div>
+        <nav>
+          <ul>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/help">Help</Link></li>
+          </ul>
+        </nav>
+        <Switch>
+          <Route exact path="/" component={Home}/>
+          <Route path="/help" component={Help}/>
+        </Switch>
+      </div>
+    </Router>
+  </Provider>;
 
 export default Core;
