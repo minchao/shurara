@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.1
 info:
   version: 0.0.1
   title: Shurara
@@ -21,7 +21,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewPost"
+              $ref: "#/components/schemas/NewPostRequestBody"
       responses:
         "201":
           description: OK
@@ -66,6 +66,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MultipleCommentsResponse"
     post:
       summary: Create a comment for a post
       tags:
@@ -80,10 +84,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewComment"
+              $ref: "#/components/schemas/NewCommentRequestBody"
+        required: true
       responses:
         "201":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleCommentResponse"
   /posts/{slug}/comments/{id}:
     delete:
       summary: Delete a comment for a post
@@ -105,10 +114,42 @@ paths:
           description: OK
 components:
   schemas:
-    NewPost:
+    NewPostRequestBody:
       type: object
-    NewComment:
+    Comment:
       type: object
+      properties:
+        id:
+          type: integer
+        body:
+          type: string
+        createdAt:
+          type: integer
+          format: int64
+        updatedAt:
+          type: integer
+          format: int64
+    NewCommentRequestBody:
+      type: object
+      properties:
+        body:
+          type: string
+    SingleCommentResponse:
+      type: object
+      properties:
+        comment:
+          $ref: "#/components/schemas/Comment"
+      required:
+      - comment
+    MultipleCommentsResponse:
+      type: object
+      properties:
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+      required:
+      - comments
 tags:
 - name: posts
 - name: comments
