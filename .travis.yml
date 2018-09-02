@@ -1,8 +1,13 @@
+sudo: required
 language: go
 
 go:
 - 1.11.x
 - master
 
+services:
+- docker
+
 script:
+- make validate-openapi
 - make build

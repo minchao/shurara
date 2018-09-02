@@ -1,4 +1,4 @@
-.PHONY: check-style build build-with-docker clean docker-build
+.PHONY: check-style validate-openapi build build-with-docker clean docker-build
 
 PACKAGES=$(shell go list ./... | grep -v vendor)
 
@@ -23,6 +23,9 @@ check-style: vet
 		echo "go fmt failure"; \
 		exit 1; \
 	fi
+
+validate-openapi:
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v3.2.3 validate --input-spec /local/openapi.yaml
 
 build: .deps-install check-style
 	@echo Building app

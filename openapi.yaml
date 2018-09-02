@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: Shurara
+servers:
+- url: http://localhost:8080/v1
+paths:
+  /posts:
+    get:
+      summary: Get recent posts globally
+      tags:
+      - posts
+      responses:
+        "200":
+          description: OK
+    post:
+      summary: Create a post
+      tags:
+      - posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewPost"
+      responses:
+        "201":
+          description: OK
+  /posts/{slug}:
+    get:
+      summary: Get an post
+      tags:
+      - posts
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    delete:
+      summary: Delete a post
+      tags:
+      - posts
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /posts/{slug}/comments:
+    get:
+      summary: Get comments for post
+      tags:
+      - comments
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    post:
+      summary: Create a comment for a post
+      tags:
+      - comments
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewComment"
+      responses:
+        "201":
+          description: OK
+  /posts/{slug}/comments/{id}:
+    delete:
+      summary: Delete a comment for a post
+      tags:
+      - comments
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    NewPost:
+      type: object
+    NewComment:
+      type: object
+tags:
+- name: posts
+- name: comments
