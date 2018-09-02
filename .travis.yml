@@ -6,4 +6,3 @@ go:
 
 script:
 - make build
-- cd web && make build

@@ -37,8 +37,3 @@ clean:
 	rm -f shurara
 	rm -f .deps-install
 	rm -rf vendor
-
-docker-build: clean build-with-docker
-	@echo Building Docker image
-	cd web && make clean && make build-with-docker
-	docker build -t minchao/shurara.com:latest .

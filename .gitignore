@@ -2,7 +2,3 @@
 
 /.deps-install
 /vendor/
-
-/web/node_modules/
-/web/dist/
-/web/.yarn-install

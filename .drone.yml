@@ -8,11 +8,3 @@ pipeline:
     image: golang
     commands:
       - make build
-
-  web:
-    group: build
-    image: node:6.11
-    commands:
-      - cd ./web
-      - make lint
-      - make build
