@@ -13,6 +13,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MultiplePostResponse"
     post:
       summary: Create a post
       tags:
@@ -22,9 +26,14 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/NewPostRequestBody"
+        required: true
       responses:
         "201":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SinglePostResponse"
   /posts/{slug}:
     get:
       summary: Get an post
@@ -39,6 +48,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SinglePostResponse"
     delete:
       summary: Delete a post
       tags:
@@ -114,8 +127,58 @@ paths:
           description: OK
 components:
   schemas:
+    Post:
+      type: object
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        createdAt:
+          type: integer
+          format: int64
+        updatedAt:
+          type: integer
+          format: int64
+      required:
+      - slug
+      - title
+      - createdAt
+      - updatedAt
+    NewPost:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+      required:
+      - title
     NewPostRequestBody:
       type: object
+      properties:
+        post:
+          $ref: "#/components/schemas/NewPost"
+      required:
+      - post
+    SinglePostResponse:
+      type: object
+      properties:
+        post:
+          $ref: "#/components/schemas/Post"
+      required:
+      - post
+    MultiplePostResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Post"
+      required:
+      - posts
     Comment:
       type: object
       properties:
