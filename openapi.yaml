@@ -127,6 +127,13 @@ paths:
           description: OK
 components:
   schemas:
+    Profile:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+      - username
     Post:
       type: object
       properties:
@@ -136,6 +143,8 @@ components:
           type: string
         body:
           type: string
+        author:
+          $ref: "#/components/schemas/Profile"
         createdAt:
           type: integer
           format: int64
@@ -186,6 +195,8 @@ components:
           type: integer
         body:
           type: string
+        author:
+          $ref: "#/components/schemas/Profile"
         createdAt:
           type: integer
           format: int64
